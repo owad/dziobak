@@ -1,0 +1,63 @@
+# -* - coding: utf-8 -*-
+from datetime import datetime, timedelta
+
+from django.db import models
+from django.db.models import Sum, Count
+from django.core.urlresolvers import reverse
+
+from product.constants import *
+from cs_user.models import User
+from base.models import AbstractBaseModel as ABM
+
+
+class Courier(ABM):
+    
+    name = models.CharField(max_length='64')
+    
+    class Meta(ABM.Meta):
+        verbose_name_plural = "kurierzy"
+        verbose_name = "kurier"
+    
+    def __unicode__(self):
+        return self.name
+
+
+class Product(ABM):
+
+    name = models.CharField(max_length=128, verbose_name='nazwa')
+    producent = models.CharField(max_length=128, blank=True, verbose_name='producent')
+    serial = models.CharField(max_length=128, blank=True, verbose_name='numer seryjny')
+    invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
+    description = models.TextField(verbose_name='opis usterki')
+    user = models.ForeignKey(User)  # client (not an emplyee)
+    
+    
+    class Meta(ABM.Meta):
+        verbose_name_plural = "zgłoszenia"
+        verbose_name = "zgłoszenie"
+
+    def __unicode__(self):
+        return self.name
+
+
+    def get_absolute_url(self):
+        return reverse('product_detail', kwargs={'pk': self.pk})
+
+class Comment(ABM):
+
+    description = models.TextField(verbose_name='komentarz')
+    product = models.ForeignKey('Product')
+    user = models.ForeignKey(User)  # employee (determines who is an owner of a product)
+    status = models.CharField(max_length=128, choices=[(1, 'jeden'), (2, 'dwa')], verbose_name='status')
+
+    class Meta(ABM.Meta):
+        verbose_name_plural = "komentarze"
+        verbose_name = "komentarz"
+        ordering = ['-created']
+
+    def __unicode__(self):
+        return self.description
+
+    def get_absolute_url(self):
+        return reverse('product_detail', kwargs={'pk': self.product.pk})
+

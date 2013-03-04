@@ -1,0 +1,9 @@
+<table class="user-info">
+    {% for field, value in client.get_details_list %}
+    <tr>
+        <th>{{ field }}</th>
+        <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+</table>
+

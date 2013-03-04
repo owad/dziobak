@@ -1,0 +1,10 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+    {% for p in products %}
+    <div><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></div>
+    {% empty %}
+    <div>brak zgłoszeń</div>
+    {% endfor %}
+{% endblock %}
+

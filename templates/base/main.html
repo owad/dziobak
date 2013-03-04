@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>Company Name</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="{{ STATIC_URL}}css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    {% block top %}
+        {% include 'base/top.html' %}
+    {% endblock %}
+
+    {% block menu %}
+        {% include 'base/menu.html' %}
+    {% endblock %}
+
+    <div id="container">
+    {% block content %}
+
+    {% endblock %}
+    </div>
+</body>
+</html>
+
