@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^wyloguj/$', logout, {'template_name': 'registration/logout.html'}, name='cs_logout'),
 
     url(r'^zgloszenia/', include('product.urls')),
-    url(r'^klienci/', include('cs_user.urls')),
+    url(r'^uzytkownicy/', include('cs_user.urls')),
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),

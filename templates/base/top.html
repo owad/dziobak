@@ -1,5 +1,5 @@
 <div id="top">
     <h2 id="employee-company">{{ user.company }}</h2>
-    <div id="employee-info">zalogowany jako {{ user }}. Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}. <a href="{% url 'cs_logout' %}">wyloguj</a></div>
+    <div id="employee-info">zalogowany jako {{ user }}. Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}. <a href="{% url 'user_update' user.pk %}">profil</a> <a href="{% url 'cs_logout' %}">wyloguj</a></div>
 </div>
 

@@ -6,6 +6,12 @@
     <table>
     {{ form.as_table }}
 
+    {% if user.pk %}
+    <tr>
+        <td></td>
+        <td><a href="{% url 'user_password_reset' %}">zmień hasło</a></td>
+    </tr>
+    {% endif %}
     {% include 'inc/buttons.html' %}
     </table>
 </form>

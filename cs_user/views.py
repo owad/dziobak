@@ -1,7 +1,9 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
+from django.contrib.auth.views import password_change
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.forms import PasswordChangeForm
 
 from cs.settings import ROWS_PER_PAGE
 from cs_user.models import User
@@ -45,4 +47,16 @@ class UserUpdate(UpdateView):
         return get_object_or_404(User, pk=self.kwargs['pk'])
 
 user_update = UserUpdate.as_view()
+
+
+def user_password_change(request):
+
+    template_name='registration/password_change_form.html'
+    post_change_redirect = reverse('user_detail', kwargs={'pk': request.user.pk})
+
+    return password_change(request,
+                           template_name=template_name,
+                           post_change_redirect=post_change_redirect,
+                           password_change_form=PasswordChangeForm,
+                           current_app=None, extra_context=None)
 
