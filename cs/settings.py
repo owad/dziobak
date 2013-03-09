@@ -113,10 +113,8 @@ ROOT_URLCONF = 'cs.urls'
 WSGI_APPLICATION = 'cs.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '/home/ow/Workspace/fun/serwis2/cs/templates/',
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    #'/home/ow/Workspace/fun/serwis2/cs/templates/',  # LOCAL
+    '/home/ubuntu/sites/dziobak/templates/',
 )
 
 INSTALLED_APPS = (
@@ -166,3 +164,4 @@ AUTH_USER_MODEL = 'cs_user.User'
 ROWS_PER_PAGE = 50
 
 UPLOAD_URL = 'media/upload/'
+
