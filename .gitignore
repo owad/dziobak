@@ -1,4 +1,5 @@
 *.pyc
+.*
 django
 db.sqlite3
 media/logo/*
