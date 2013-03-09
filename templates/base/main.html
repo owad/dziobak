@@ -1,24 +1,46 @@
-<html>
+<!DOCTYPE html>
+<html lang="pl">
 <head>
     <title>Company Name</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="{{ STATIC_URL}}css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+    <div class="container">
+        <div class="row">
+            <div class="span2"><h2>{{ user.company }}</h2></div>
+            
+            <div class="span8 right">
+                <div>zalogowany jako {{ user }}</div>
+                <div>Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}</div>
+            </div>
+            <div class="span2 right btn-group">
+                <a class="btn" href="{% url 'user_update' user.pk %}">profil</a>
+                <a class="btn" href="{% url 'cs_logout' %}">wyloguj</a>
+            </div>
 
-    {% block top %}
-        {% include 'base/top.html' %}
-    {% endblock %}
+        </div>
+        <div class="row">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li><a href="{% url 'product_list'%}">zgłoszenia</a></li>
+                        <li><a href="{% url 'user_list' %}">klienci</a></li>
+                        <li><a href="{% url 'user_create' %}">nowy klient</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-    {% block menu %}
-        {% include 'base/menu.html' %}
-    {% endblock %}
+        <div class="row">
+        {% block content %}
 
-    <div id="container">
-    {% block content %}
-
-    {% endblock %}
+        {% endblock %}
+        </div>
     </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
 
