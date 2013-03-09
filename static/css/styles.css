@@ -8,36 +8,11 @@ body, th, td {
     font: 12px/1.4em Verdana,sans-serif;
 }
 
-table.user-info td {
-    font-weight: bold;
-}
-
-table.user-info th {
-    text-align: right;
-}
-
-#top {
-    clear: both;
-    display: block;
-    height: 30px;
-}
-
-#employee-company {
-    float: left;
-    margin-top: 0px;
-}
-
-#employee-info {
-    float: right;
-}
-
-#container {
-    position: relative;
-    min-width: 55em;
-    max-width: 100em;
-}
-
 .errorlist {
     color: #ff0000;
+}
+
+.right {
+    text-align: right;
 }
 
