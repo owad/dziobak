@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="container">
+        {% if user.pk %}
         <div class="row">
             <div class="span2"><h2>{{ user.company }}</h2></div>
             
@@ -19,8 +20,9 @@
                 <a class="btn" href="{% url 'user_update' user.pk %}">profil</a>
                 <a class="btn" href="{% url 'cs_logout' %}">wyloguj</a>
             </div>
-
         </div>
+        {% endif %}
+
         <div class="row">
             <div class="navbar">
                 <div class="navbar-inner">
