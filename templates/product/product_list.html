@@ -2,12 +2,23 @@
 
 {% block content %}
     <table class="datatable">
+        <tr>
+            <td>ID</td>
+            <td>Klient</td>
+            <td>Produkt</td>
+            <td>Producent</td>
+            <td>Serial</td>
+            <td>Gwarancja</td>
+            <td>Data przyjęcia</td>
+            <td></td>
+        </tr>
     {% for p in products %}
         <tr>
-            <td class="span3"><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></td>
-            <td class="span3">{{ p.producent }}</td>
-            <td class="span3">{{ p.description }}</td>
+            <td class="span3">{{ p.pk }}</td>
             <td class="span3">{{ p.user }}</td>
+            <td class="span3">{{ p.producent }}</td>
+            <tr class="span3">{{ p.serial }}</td>
+            <td class="span3"><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></td>
         </tr>
     {% empty %}
         <tr>

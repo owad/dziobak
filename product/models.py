@@ -29,6 +29,8 @@ class Product(ABM):
     serial = models.CharField(max_length=128, blank=True, verbose_name='numer seryjny')
     invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
     description = models.TextField(verbose_name='opis usterki')
+    warranty = models.BooleanField(default=False, choices=[(False, 'Nie'), (True, 'Tak')], verbose_name='gwarancja')
+    status = models.CharField(max_length=64, verbose_name='status')
     user = models.ForeignKey(User)  # client (not an emplyee)
     
     
