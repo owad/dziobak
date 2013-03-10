@@ -4,4 +4,4 @@ django
 db.sqlite3
 media/logo/*
 media/upload/*
-
+venv/*
