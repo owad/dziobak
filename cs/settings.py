@@ -113,7 +113,7 @@ ROOT_URLCONF = 'cs.urls'
 WSGI_APPLICATION = 'cs.wsgi.application'
 
 TEMPLATE_DIRS = (
-    #'/home/ow/Workspace/fun/serwis2/cs/templates/',  # LOCAL
+    '/home/ow/Workspace/fun/serwis2/cs/templates/',  # LOCAL
     '/home/ubuntu/sites/dziobak/templates/',
 )
 
