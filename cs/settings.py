@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'base',
     'cs_user',
     'product',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging
