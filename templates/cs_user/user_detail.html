@@ -1,18 +1,26 @@
 {% extends 'base/main.html' %}
 
 {% block content %}
+    <h1>Dane użytkownika {% if client %} {{ client }} {% endif %}</h1>
     {% include 'cs_user/user_info.html' %}
-
     <div>
     <a href="{% url 'user_update' client.pk %}">edytuj</a>
     <a href="{% url 'product_create' client.pk %}">nowe zgłoszenie</a>
     </div>
-    <ul>
-        {% for p in user.product_set.all %}
-        <li><a href="{% url 'product_detail' pk=p.pk %}">{{ p }}</a></li>
+
+    <table>
+        {% for p in client.product_set.all %}
+        <tr>
+            <td><a href="{% url 'product_detail' pk=p.pk %}">{{ p }}</a></td>
+            <td>{{ p.producent }}</td>
+            <td>{{ p.description }}</td>
+            <td></td>
+        </tr>
         {% empty %}
-        <li>brak zgłoszeń</li>
+        <tr>
+            </td>brak zgłoszeń</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}
 

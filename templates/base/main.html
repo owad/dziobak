@@ -38,6 +38,7 @@
         </div>
 
         <div class="row">
+        {% endif %}
         {% block content %}
 
         {% endblock %}
@@ -45,6 +46,12 @@
     </div>
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="{{ STATIC_URL}}datatables/media/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable();
+        } );
+    </script>
 </body>
 </html>
 

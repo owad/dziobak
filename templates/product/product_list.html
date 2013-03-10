@@ -1,6 +1,24 @@
 {% extends 'base/main.html' %}
 
 {% block content %}
+    <table class="datatable">
+    {% for p in products %}
+        <tr>
+            <td class="span3"><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></td>
+            <td class="span3">{{ p.producent }}</td>
+            <td class="span3">{{ p.description }}</td>
+            <td class="span3">{{ p.user }}</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td>brak zgłoszeń</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
+
+{% comment %}
     {% for p in products %}
     <div class="row-fluid">
         <div class="span3"><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></div>
@@ -11,5 +29,5 @@
     {% empty %}
     <div>brak zgłoszeń</div>
     {% endfor %}
-{% endblock %}
+{% endcomment %}
 
