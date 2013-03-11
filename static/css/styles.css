@@ -16,3 +16,6 @@ body, th, td {
     text-align: right;
 }
 
+table.table tr {
+    cursor: pointer;
+}
