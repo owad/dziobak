@@ -46,12 +46,19 @@ class Product(ABM):
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'pk': self.pk})
 
+
 class Comment(ABM):
 
-    description = models.TextField(verbose_name='komentarz')
+    # Statuses
+    S10 = (10, 'przyjęty')
+    S20 = (20, 'w realizacji')
+    S30 = (30, 'do wydania')
+    S40 = (40, 'wydany')
+
+    description = models.TextField(default='-', verbose_name='komentarz')
     product = models.ForeignKey('Product')
     user = models.ForeignKey(User)  # employee (determines who is an owner of a product)
-    status = models.CharField(max_length=128, choices=[(1, 'jeden'), (2, 'dwa')], verbose_name='status')
+    status = models.CharField(max_length=64, choices=[S10, S20, S30, S40], verbose_name='status')
 
     class Meta(ABM.Meta):
         verbose_name_plural = "komentarze"
