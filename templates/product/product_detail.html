@@ -1,15 +1,18 @@
 {% extends 'base/main.html' %}
 
+{% block heading %}Dane zgłoszenia {{ product }} {% endblock %}
+
 {% block content %}
     {{ product }}
     {% block comment_create %}
 
     {% endblock %}
 
-    <a href="{% url 'product_update' product.pk %}">edytuj</a>
+    <a href="{% url 'product_update' product.pk product.user.pk %}">edytuj</a>
     <a href="{% url 'comment_create' product.pk %}">dodaj komentarz</a>
 
 
+    <h2>Komentarze</h2>
     {% block comments %}
         <table>
         {% for c in product.comment_set.all %}

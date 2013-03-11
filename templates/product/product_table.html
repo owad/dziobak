@@ -16,9 +16,9 @@
     <tbody>
     {% for p in products %}
         <tr>
-            <td>{{ p.pk }}</td>
-            <td>{{ p.user }}</td>
-            <td><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></td>
+            <td>{{ p.key }}</td>
+            <td><a href="{{ p.user.get_absolute_url }}">{{ p.user }}</a></td>
+            <td><a href="{{ p.get_absolute_url }}">{{ p }}</a></td>
             <td>{{ p.producent }}</td>
             <td>{{ p.serial }}</td>
             <td>{{ p.warranty }}</td>
@@ -29,7 +29,7 @@
         </tr>
     {% empty %}
         <tr>
-            <td>brak zgłoszeń</td>
+            <td colspan="10" style="text-align: center;">brak zgłoszeń</td>
         </tr>
     {% endfor %}
     </tbody>

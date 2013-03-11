@@ -30,8 +30,9 @@ class ProductCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = User.objects.get(pk=self.kwargs['user_pk'])
+        form.instance.status = Comment.STATUS[10]
         product = form.save()
-        comment = Comment(product=product, user=self.request.user, status=Comment.S10).save()
+        comment = Comment(product=product, user=self.request.user, status=Comment.STATUS[10]).save()
         return super(ProductCreate, self).form_valid(form)
 
 product_create = ProductCreate.as_view()

@@ -13,8 +13,14 @@ urlpatterns = patterns('',
     url(r'^zaloguj/$', login, {'template_name': 'registration/login.html'}, name='cs_login'),
     url(r'^wyloguj/$', logout, {'template_name': 'registration/logout.html'}, name='cs_logout'),
 
-    url(r'^zgloszenia/', include('product.urls')),
-    url(r'^uzytkownicy/', include('cs_user.urls')),
+    # clients
+    url(r'^klient/', include('cs_user.urls')),
+
+    # employees
+    url(r'^pracownik/zmien_haslo$', 'user_password_change', name='user_password_reset'),
+
+    # products
+    url(r'^zgloszenie/', include('product.urls')),
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),

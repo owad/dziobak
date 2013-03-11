@@ -12,6 +12,7 @@
                 <td>Miejscowość</td>
                 <td>Kod pocztowy</td>
                 <td>Telefon kontaktowy</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@
                 <td>{{ c.city|default:'-' }}</td>
                 <td>{{ c.postcode|default:'-' }}</td>
                 <td>{{ c.phone_numbers }}</td>
+                <td><a title="nowe zgłoszenie" href="{% url 'product_create' c.pk %}"><i class="icon-plus"></i></a></td>
             </tr>
         {% empty %}
             <tr>

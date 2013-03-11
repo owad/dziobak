@@ -1,14 +1,21 @@
 {% extends 'base/main.html' %}
 
+{% block heading %}
+    Dane użytkownika {{ client }}
+    <small>
+        <a title="edytuj dane użytkownika" class="btn" href="{% url 'user_update' client.pk %}"><i class="icon-edit"></i></a>
+    </small>
+{% endblock %}
+
 {% block content %}
-    {% block heading %}Dane użytkownika {% if client %} {{ client }} {% endif %}{% endblock %}
-    {% include 'cs_user/user_info.html' %}
-    <div>
-    <a href="{% url 'user_update' client.pk %}">edytuj</a>
-    <a href="{% url 'product_create' client.pk %}">nowe zgłoszenie</a>
-    </div>
+    <address>
+        {% for field, value in client.get_details_list %}
+            {{ value }}<br>
+        {% endfor %}
+    </address>
+
+    <a class="btn" href="{% url 'product_create' client.pk %}">nowe zgłoszenie</a>
 
     {% include 'product/product_table.html' with products=client.product_set.all %}
-
 {% endblock %}
 
