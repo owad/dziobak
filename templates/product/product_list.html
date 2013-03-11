@@ -1,44 +1,41 @@
 {% extends 'base/main.html' %}
 
 {% block content %}
-    <table class="datatable">
-        <tr>
-            <td>ID</td>
-            <td>Klient</td>
-            <td>Produkt</td>
-            <td>Producent</td>
-            <td>Serial</td>
-            <td>Gwarancja</td>
-            <td>Data przyjęcia</td>
-            <td></td>
-        </tr>
-    {% for p in products %}
-        <tr>
-            <td class="span3">{{ p.pk }}</td>
-            <td class="span3">{{ p.user }}</td>
-            <td class="span3">{{ p.producent }}</td>
-            <tr class="span3">{{ p.serial }}</td>
-            <td class="span3"><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td>brak zgłoszeń</td>
-        </tr>
-    {% endfor %}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Klient</td>
+                <td>Produkt</td>
+                <td>Producent</td>
+                <td>Serial</td>
+                <td>Gwarancja</td>
+                <td>Status</td>
+                <td>Koszt</td>
+                <td>Ostatnia zmiana</td>
+                <td>Data przyjęcia</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in products %}
+            <tr>
+                <td>{{ p.pk }}</td>
+                <td>{{ p.user }}</td>
+                <td><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></td>
+                <td>{{ p.producent }}</td>
+                <td>{{ p.serial }}</td>
+                <td>{{ p.warranty }}</td>
+                <td>{{ p.status }}</td>
+                <td>123zł</td>
+                <td>{{ p.created }}</td>
+                <td>{{ p.modified }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td>brak zgłoszeń</td>
+            </tr>
+        {% endfor %}
+        </tbody>
     </table>
 {% endblock %}
-
-
-{% comment %}
-    {% for p in products %}
-    <div class="row-fluid">
-        <div class="span3"><a href="{% url 'product_detail' p.pk %}">{{ p }}</a></div>
-        <div class="span3">{{ p.producent }}</div>
-        <div class="span3">{{ p.description }}</div>
-        <div class="span3">{{ p.user }}</div>
-    </div>
-    {% empty %}
-    <div>brak zgłoszeń</div>
-    {% endfor %}
-{% endcomment %}
 
