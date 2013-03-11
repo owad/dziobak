@@ -1,26 +1,14 @@
 {% extends 'base/main.html' %}
 
 {% block content %}
-    <h1>Dane użytkownika {% if client %} {{ client }} {% endif %}</h1>
+    {% block heading %}Dane użytkownika {% if client %} {{ client }} {% endif %}{% endblock %}
     {% include 'cs_user/user_info.html' %}
     <div>
     <a href="{% url 'user_update' client.pk %}">edytuj</a>
     <a href="{% url 'product_create' client.pk %}">nowe zgłoszenie</a>
     </div>
 
-    <table>
-        {% for p in client.product_set.all %}
-        <tr>
-            <td><a href="{% url 'product_detail' pk=p.pk %}">{{ p }}</a></td>
-            <td>{{ p.producent }}</td>
-            <td>{{ p.description }}</td>
-            <td></td>
-        </tr>
-        {% empty %}
-        <tr>
-            </td>brak zgłoszeń</td>
-        </tr>
-        {% endfor %}
-    </table>
+    {% include 'product/product_table.html' with products=client.product_set.all %}
+
 {% endblock %}
 

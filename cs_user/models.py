@@ -83,3 +83,9 @@ class User(AbstractUser):
                 data.append((self._meta.get_field(field).verbose_name, value))
         return data
 
+    @property
+    def phone_numbers(self):
+        if self.secondary_phone:
+            return "%s, %s" % (self.primary_phone, self.secondary_phone)
+        return self.primary_phone
+

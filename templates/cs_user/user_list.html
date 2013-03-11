@@ -1,21 +1,36 @@
 {% extends 'base/main.html' %}
 
+{% block heading %}List klientów{% endblock %}
 {% block content %}
-    <table>
+    <table class="table table-striped table-hover">
         <thead>
+            <tr>
+                <td>ID</td>
+                <td>Klient</td>
+                <td>Firma</td>
+                <td>Adres</td>
+                <td>Miejscowość</td>
+                <td>Kod pocztowy</td>
+                <td>Telefon kontaktowy</td>
+            </tr>
         </thead>
         <tbody>
-        {% for u in users %}
+        {% for c in clients %}
             <tr>
-                <td>{{ u.pk }}</td>
-                <td><a href="{% url 'user_detail' u.pk %}">{{ u }}</a></td>
+                <td>{{ c.pk }}</td>
+                <td><a href="{{ c.get_absolute_url }}">{{ c.get_full_name }}</a></td>
+                <td>{{ c.company_name|default:'-' }}</td>
+                <td>{{ c.address|default:'-' }}</td>
+                <td>{{ c.city|default:'-' }}</td>
+                <td>{{ c.postcode|default:'-' }}</td>
+                <td>{{ c.phone_numbers }}</td>
             </tr>
         {% empty %}
             <tr>
-                <td>brak klientów</td>
+                <td>brak zgłoszeń</td>
             </tr>
         {% endfor %}
         </tbody>
-    </table<
+    </table>
 {% endblock %}
 

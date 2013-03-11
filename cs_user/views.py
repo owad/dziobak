@@ -21,7 +21,7 @@ user_detail = UserDetail.as_view()
 
 
 class UserList(ListView):
-    context_object_name = 'users'
+    context_object_name = 'clients'
     queryset = User.objects.all()
     paginate_by = ROWS_PER_PAGE
 
@@ -42,6 +42,7 @@ user_create = UserCreate.as_view()
 class UserUpdate(UpdateView):
     form_class = UserUpdateForm
     template_name = 'cs_user/user_create_or_update.html'
+    context_object_name = 'client'
 
     def get_object(self):
         return get_object_or_404(User, pk=self.kwargs['pk'])
