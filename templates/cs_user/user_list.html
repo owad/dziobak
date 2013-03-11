@@ -1,10 +1,21 @@
 {% extends 'base/main.html' %}
 
 {% block content %}
-    {% for u in users %}
-    <div><a href="{% url 'user_detail' u.pk %}">{{ u }}</a></div>
-    {% empty %}
-    <div>brak klientów</div>
-    {% endfor %}
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+        {% for u in users %}
+            <tr>
+                <td>{{ u.pk }}</td>
+                <td><a href="{% url 'user_detail' u.pk %}">{{ u }}</a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td>brak klientów</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table<
 {% endblock %}
 
