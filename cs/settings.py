@@ -1,4 +1,7 @@
 # -* - coding: utf-8 -*-
+import os
+ROOT_PATH = os.getcwd().rstrip('/cs')
+
 # Django settings for cs project.
 
 DEBUG = True
@@ -63,7 +66,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    '/home/ow/Workspace/fun/serwis2/cs/static/',
+    '%s/%s' % (ROOT_PATH, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -113,8 +116,7 @@ ROOT_URLCONF = 'cs.urls'
 WSGI_APPLICATION = 'cs.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '/home/ow/Workspace/fun/serwis2/cs/templates/',  # LOCAL
-    '/home/ubuntu/sites/dziobak/templates/',
+    '%s/%s' % (ROOT_PATH, 'templates'),
 )
 
 INSTALLED_APPS = (
