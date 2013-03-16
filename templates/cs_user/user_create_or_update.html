@@ -1,4 +1,4 @@
-{% extends 'base/main.html' %}
+{% extends 'main.html' %}
 
 {% block heading %}{% if client %}Edycja danych klienta "{{ client }}" {% else %}Nowy klient{% endif %}{% endblock %} 
 
@@ -9,7 +9,7 @@
     <table>
     {{ form.as_table }}
 
-    {% if user.pk %}
+    {% if client.pk %}
     <tr>
         <td></td>
         <td><a href="{% url 'user_password_reset' %}">zmień hasło</a></td>
