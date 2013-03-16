@@ -2,13 +2,12 @@
 from datetime import datetime, timedelta
 
 from django.db import models
-from django.db.models import Sum, Count
+from django.db.models import Manager, Q
 from django.core.urlresolvers import reverse
 
 from product.constants import *
 from cs_user.models import User
 from base.models import AbstractBaseModel as ABM
-
 
 class Courier(ABM):
     
@@ -20,6 +19,17 @@ class Courier(ABM):
     
     def __unicode__(self):
         return self.name
+
+
+class ProductManager(Manager):
+    
+    def search(self, qs):
+        return self.filter(
+            Q(name__icontains=qs) |
+            Q(producent__icontains=qs) |
+            Q(serial__icontains=qs) |
+            Q(invoice__icontains=qs) |
+            Q(key__icontains=qs))        
 
 
 class Product(ABM):
@@ -34,6 +44,8 @@ class Product(ABM):
     user = models.ForeignKey(User)  # client (not an emplyee)
 
     key = models.IntegerField(verbose_name=u'numer zgłoszenia')
+
+    objects = ProductManager()
     
     class Meta(ABM.Meta):
         verbose_name_plural = u'zgłoszenia'
@@ -54,33 +66,60 @@ class Product(ABM):
 
         self.key = key
         return super(Product, self).save()
-   
+
     def __unicode__(self):
         return "%s/%s" % (self.created.year, str(self.key).zfill(4))
+    
+    def get_details_list(self):
+        fields = ['name', 'producent', 'serial', 'invoice', 'description', 'waranty', 'status']
+        data = []
+
+        data.append(('klient', self.user.get_full_name()))
+
+        for field in fields:
+            value = getattr(self, field, None)
+            if value:
+                data.append((self._meta.get_field(field).verbose_name, value))
+        return data
+
+    @property
+    def cost(self):
+        return sum([sum(c) for c in self.comment_set.all().values_list('cost_service', 'cost_hardware', 'cost_transport')])        
 
 class Comment(ABM):
 
     # Statuses
-    STATUS = {10: 'przyjęty',
-              20: 'w realizacji',
-              30: 'do wydania',
-              40: 'wydany'}
+    STATUSES = [(10, 'przyjęty'),
+              (20, 'w realizacji'),
+              (30, 'do wydania'),
+              (40, 'wydany')]
 
-    ORDERED_STATUS_CHOICES =[(key, STATUS[key]) for key in STATUS.keys()]
+    STATUS_KEYS = [key for key, name in STATUSES]
 
-    description = models.TextField(default='-', verbose_name='komentarz')
+    description = models.TextField(verbose_name='komentarz')
     product = models.ForeignKey('Product')
     user = models.ForeignKey(User)  # employee (determines who is an owner of a product)
-    status = models.CharField(max_length=64, choices=ORDERED_STATUS_CHOICES, verbose_name='status')
+    status = models.IntegerField(choices=STATUSES, verbose_name='status')
+
+    cost_service = models.FloatField(default=0.0, verbose_name='koszt usługi')
+    cost_hardware = models.FloatField(default=0.0, verbose_name='koszt sprzętu')
+    cost_transport = models.FloatField(default=0.0, verbose_name='koszt dojazdu')
 
     class Meta(ABM.Meta):
         verbose_name_plural = "komentarze"
         verbose_name = "komentarz"
-        ordering = ['-created']
+        ordering = ['created']
 
     def __unicode__(self):
         return self.description
 
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'pk': self.product.pk, 'user_pk': self.product.user.pk})
+
+    def get_status(self):
+        return dict(Comment.STATUSES)[self.status]
+
+    @property
+    def cost(self):
+        return self.cost_service + self.cost_hardware + self.cost_transport
 

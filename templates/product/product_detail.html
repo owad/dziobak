@@ -1,27 +1,64 @@
-{% extends 'base/main.html' %}
+{% extends 'main.html' %}
 
-{% block heading %}Dane zgłoszenia {{ product }} {% endblock %}
+{% block heading %}
+    Dane zgłoszenia {{ product }}
+    <small>
+        <a title="edytuj dane zgłoszenia" class="btn" href="{% url 'product_update' product.pk product.user.pk %}"><i class="icon-edit"></i></a>
+    </small>
+{% endblock %}
 
 {% block content %}
-    {{ product }}
-    {% block comment_create %}
+    {% block product_details %}
+    <div>
+        {% for field, value in product.get_details_list %}
+            {{ field }}:
+            {% if field == 'klient' %}
+                <a href="{{ product.user.get_absolute_url }}">{{ value }}</a>
+            {% elif field == 'nazwa' %}
+                <a href="{{ product.get_absolute_url }}">{{ value }}</a>
+            {% else %}
+                {{ value }}
+            {% endif %}
+            <br/>
+        {% endfor %}
+    </div>
+    {% endblock %}
+
+    {% block comments %}
+    <h2>Komentarze</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td>Data</td>
+                <td>Komentarz</td>
+                <td>Koszt usługi</td>
+                <td>Koszt sprzętu</td>
+                <td>Koszt dojazdu</td>
+                <td>Status</td>
+                <td>Pracownik</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for c in product.comment_set.all %}
+            <tr>
+                <td>{{ c.created }}</td>
+                <td>{{ c.description|default:'-' }}</td>
+                <td>{{ c.cost_service }}zł</td>
+                <td>{{ c.cost_hardware }}zł</td>
+                <td>{{ c.cost_transport }}zł</td>
+                <td>{{ c.get_status }}</td>
+                <td>{{ c.user }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn fright" href="{% url 'comment_create' product.pk %}">dodaj komentarz</a>
 
     {% endblock %}
 
-    <a href="{% url 'product_update' product.pk product.user.pk %}">edytuj</a>
-    <a href="{% url 'comment_create' product.pk %}">dodaj komentarz</a>
+    {% block new_comment %}
 
-
-    <h2>Komentarze</h2>
-    {% block comments %}
-        <table>
-        {% for c in product.comment_set.all %}
-            <tr>
-                <td>{{ c.description }}</td>
-                <td>{{ c.created }}</td>
-            </tr>
-        {% endfor %}
-        </table>
     {% endblock %}
 {% endblock %}
 

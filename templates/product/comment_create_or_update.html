@@ -1,2 +1,15 @@
-{% extends 'base/create_or_update.html' %}
+{% extends 'product/product_detail.html' %}
+
+
+{% block new_comment %}
+<h2>Nowy komentarz</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+
+    {% include 'inc/buttons.html' %}
+    </table>
+</form>
+{% endblock %}
 

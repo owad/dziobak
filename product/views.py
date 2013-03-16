@@ -21,6 +21,17 @@ class ProductList(ListView):
     queryset = Product.objects.all()
     paginate_by = ROWS_PER_PAGE
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductList, self).get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q', '')
+        return context
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', None)
+        if q:
+            return Product.objects.search(q)
+        return self.queryset
+ 
 product_list = ProductList.as_view()
     
 
@@ -50,7 +61,17 @@ product_update = ProductUpdate.as_view()
 
 class CommentCreate(CreateView):
     form_class = CommentCreateForm
-    template_name = 'proudct/comment_create_or_update.html'
+    template_name = 'product/comment_create_or_update.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentCreate, self).get_context_data(**kwargs)
+        context['product'] = get_object_or_404(Product, pk=self.kwargs['product_pk'])
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.product = self.get_context_data()['product']
+        return super(CommentCreate, self).form_valid(form)        
 
 comment_create = CommentCreate.as_view()
 

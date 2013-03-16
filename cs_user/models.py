@@ -1,5 +1,6 @@
 # -* - coding: utf-8 -*-
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import AbstractUser, UserManager as DjangoUserManager
 from django.core.validators import RegexValidator
 from django.core.urlresolvers import reverse
@@ -29,6 +30,15 @@ class UserManager(DjangoUserManager):
         user.save()
         return user
 
+
+    def search(self, qs):
+        return self.filter(
+            Q(first_name__icontains=qs) |
+            Q(last_name__icontains=qs) |
+            Q(company_name__icontains=qs) |
+            Q(city__icontains=qs) |
+            Q(postcode__icontains=qs) |
+            Q(primary_phone__icontains=qs))        
 
 class User(AbstractUser):
 

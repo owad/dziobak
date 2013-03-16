@@ -25,6 +25,17 @@ class UserList(ListView):
     queryset = User.objects.all()
     paginate_by = ROWS_PER_PAGE
 
+    def get_context_data(self, **kwargs):
+        context = super(UserList, self).get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q', '')
+        return context
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', None)
+        if q:
+            return User.objects.search(q)
+        return self.queryset
+
 user_list = UserList.as_view()
     
 

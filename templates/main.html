@@ -9,6 +9,11 @@
     <link href="{{ STATIC_URL}}css/styles.css" rel="stylesheet" type="text/css">
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script>
+        var CLIENT_LIST = "{% url 'user_list' %}"
+        var PRODUCT_LIST = "{% url 'product_list' %}"
+    </script>
 </head>
 <body>
     <div class="container">
@@ -34,6 +39,18 @@
                         <li><a href="{% url 'user_list' %}">klienci</a></li>
                         <li><a href="{% url 'user_create' %}">nowy klient</a></li>
                     </ul>
+                    <form method="GET" id="search-form" action="" class="fright">
+                        <div class="input-append">
+                            <input class="span2" id="appendedDropdownButton" type="text" name="q" value="{{ q }}">
+                            <div id="search-options" class="btn-group open">
+                                <button class="btn dropdown-toggle" data-toggle="dropdown">szukaj <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="search-submit" id="client-search" href="#">klienta</a></li>
+                                    <li><a class="search-submit" id="product-search" href="#">zgłoszenia</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -41,9 +58,11 @@
         <div class="row">
         {% endif %}
         <h2>{% block heading %}{% endblock %}</h2>
-        {% block content %}
+            <div class="content">
+            {% block content %}
 
-        {% endblock %}
+            {% endblock %}
+            </div>
         </div>
     </div>
 </body>

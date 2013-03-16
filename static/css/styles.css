@@ -8,6 +8,10 @@ body, th, td {
     font: 12px/1.4em Verdana,sans-serif;
 }
 
+.center {
+    text-align: center;
+}
+
 .errorlist {
     color: #ff0000;
 }
@@ -16,6 +20,22 @@ body, th, td {
     text-align: right;
 }
 
-table.table tr {
-    cursor: pointer;
+.fright {
+    float: right;
+}
+
+#search-form {
+    margin: 10px 0px 0px 0px;
+}
+
+ul.nav {
+    font-size: 18px;
+}
+
+ul.nav li {
+    margin-top: 3px;
+}
+
+div.content input, div.content textarea {
+    width: 400px;
 }

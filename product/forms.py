@@ -19,4 +19,5 @@ class CommentCreateForm(ModelForm):
 
     class Meta:
         model = Comment
-        
+        exclude = ('user', 'modified', 'product')
+    
