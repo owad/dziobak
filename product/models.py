@@ -86,6 +86,13 @@ class Product(ABM):
     def cost(self):
         return sum([sum(c) for c in self.comment_set.all().values_list('cost_service', 'cost_hardware', 'cost_transport')])        
 
+    @property
+    def serviced_by(self):
+        employee = Comment.objects.filter(product=self, status=20)
+        if employee:
+            return employee[0].user
+        return '-'
+
 class Comment(ABM):
 
     # Statuses

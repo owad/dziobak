@@ -10,12 +10,19 @@
 {% block content %}
     <address>
         {% for field, value in client.get_details_list %}
-            {{ value }}<br>
+            {% if field != 'klient' %}
+            {{ field }}: {{ value }}<br>
+            {% endif %}
         {% endfor %}
     </address>
 
     <a class="btn" href="{% url 'product_create' client.pk %}">nowe zgłoszenie</a>
 
+    {% block product_list %}
+    <h2>List zgłoszeń</h2>
     {% include 'product/product_table.html' with products=client.product_set.all %}
+    {% endblock %}
+
+    {% block new_product %}{% endblock %}
 {% endblock %}
 

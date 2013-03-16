@@ -46,6 +46,11 @@ class ProductCreate(CreateView):
         comment = Comment(product=product, user=self.request.user, status=Comment.STATUS[10]).save()
         return super(ProductCreate, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreate, self).get_context_data(**kwargs)
+        context['client'] = get_object_or_404(User, pk=self.kwargs['user_pk'])
+        return context
+
 product_create = ProductCreate.as_view()
 
 
@@ -56,6 +61,11 @@ class ProductUpdate(UpdateView):
     def get_object(self):
         return get_object_or_404(Product, pk=self.kwargs['pk'])
  
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreate, self).get_context_data(**kwargs)
+        context['client'] = get_object_or_404(User, pk=self.kwargs['user_pk'])
+        return context
+
 product_update = ProductUpdate.as_view()
 
 

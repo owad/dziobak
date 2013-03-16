@@ -8,6 +8,11 @@ body, th, td {
     font: 12px/1.4em Verdana,sans-serif;
 }
 
+.container {
+    display: block;
+    width: 80%;
+}
+
 .center {
     text-align: center;
 }
@@ -39,3 +44,16 @@ ul.nav li {
 div.content input, div.content textarea {
     width: 400px;
 }
+
+table th {
+    text-align: right;
+}
+
+thead tr td {
+    font-weight: bold;
+}
+
+.middle {
+    padding: 0px 5px;
+}
+

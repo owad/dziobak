@@ -1,4 +1,9 @@
-{% extends 'generic/create_or_update.html' %}
-{{ client }}
-{% block heading %}{{ object }}{% endblock %}
+{% extends 'cs_user/user_detail.html' %}
+
+{% block product_list %}{% endblock %}
+
+{% block new_product %}
+<h2>Nowe zgłoszenie</h2>
+{% include 'generic/create_or_update.html' %}
+{% endblock %}
 

@@ -18,10 +18,10 @@
 <body>
     <div class="container">
         {% if user.pk %}
-        <div class="row">
-            <div class="span2"><h1>{{ user.company }}</h1></div>
+        <div class="row top">
+            <div class="span7"><h1>{{ user.company }}</h1></div>
             
-            <div class="span8 right">
+            <div class="span10 right">
                 <div>zalogowany jako {{ user }}</div>
                 <div>Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}</div>
             </div>
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row middle">
             <div class="navbar">
                 <div class="navbar-inner">
                     <ul class="nav">
@@ -55,7 +55,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row bottom">
         {% endif %}
         <h2>{% block heading %}{% endblock %}</h2>
             <div class="content">
