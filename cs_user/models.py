@@ -41,6 +41,10 @@ class User(AbstractUser):
         (CLIENT_WITH_ACCESS, 'Klient z dostępem do zleceń'),
         (CLIENT, 'Zwykły klient')]
 
+    CLIENTS = [
+        (CLIENT_WITH_ACCESS, 'Klient z dostępem do zleceń'),
+        (CLIENT, 'Zwykły klient')]
+
     objects = UserManager()
 
     class Meta:

@@ -11,7 +11,8 @@ class UserCreateForm(ModelForm):
         exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions', 'is_staff', 'is_active', 'date_joined', 'company')
 
     address = forms.CharField(widget=Textarea)    
-
+    role = forms.ChoiceField(choices=User.CLIENTS)   
+ 
     def __init__(self, *args, **kwargs):
         super(UserCreateForm, self).__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
