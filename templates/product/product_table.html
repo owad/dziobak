@@ -32,7 +32,7 @@
             <td>{{ p.modified }}</td>
             <td>{{ p.serviced_by }}</td>
             <td>
-                <a title="drukuj zgłoszenie" href="#"><i class="icon-print"></i></a>
+                <a title="drukuj zgłoszenie" href="{% url 'product_pdf' p.pk p.user.pk %}"><i class="icon-print"></i></a>
             </td>
         </tr>
     {% empty %}
