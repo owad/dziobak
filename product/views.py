@@ -15,6 +15,7 @@ from django.template import Context
 import ho.pisa as pisa
 import cStringIO as StringIO
 import cgi
+from cs.settings import STATIC_URL
 
 
 class ProductDetail(DetailView):

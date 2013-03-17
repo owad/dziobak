@@ -93,6 +93,13 @@ class Product(ABM):
             return employee[0].user
         return '-'
 
+    def get_status(self):
+        return dict(Comment.STATUSES)[self.status]
+
+    @property
+    def last_comment(self):
+        return Comment.objects.filter(product=self).order_by('-pk')[0]
+
 class Comment(ABM):
 
     # Statuses

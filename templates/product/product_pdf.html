@@ -3,21 +3,41 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-    <title>Zgłoszenie reklamacyjne nr {{ product.get_signature }} z dnia {{ product.created|date:"d/m/Y" }}</title>
+    <title>Zgłoszenie reklamacyjne nr {{ product }} z dnia {{ product.created|date:"d/m/Y" }}</title>
     <style type="text/css">
-    @font-face { font-family: "DejaVuSans"; src: url("{{ STATIC_URL }}fonts/DejaVuSans.ttf"); font-size: 14px; }
-    html { font-family: "DejaVuSans"; }
-    td { padding-top: 5px; }
+
+        @font-face {  
+           font-family: "dejavu";  
+           src: url(static/fonts/DejaVuSans.ttf);  
+        }  
+          
+        @page {  
+          margin: 1cm;  
+          margin-bottom: 2.5cm;  
+          @frame footer {  
+            -pdf-frame-content: footerContent;  
+            bottom: 2cm;  
+            margin-left: 1cm;  
+            margin-right: 1cm;  
+            height: 1cm;  
+          }  
+        }
+        html, body, table, caption, tbody, tfoot, thead, tr, th, td {  
+            font-family: "dejavu";  
+        } 
+
+        td { padding-top: 5px; }
     </style>
 </head>
 <body>
     <table style="border-collapse: collapse; border-spacing: 0px;">
         <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
-            <td colspan="5">Zgłoszenie reklamacyjne nr {{ product.get_signature }} z dnia {{ product.created|date:"d/m/Y" }}</td>
+            <td colspan="5">Zgłoszenie reklamacyjne nr {{ product }} z dnia {{ product.created|date:"d/m/Y" }}</td>
         </tr>
         <tr>
             <td colspan="5">&nbsp;</td>
         </tr>
+        <tr><td>{{ STATIC_URL }},   {{ STATIC_URL }}fonts/DejaVuSans.ttf </td></tr>
         <tr>
             <td>
                 <div>LECH-KOM Lubaczów</div>
@@ -42,7 +62,7 @@
             <td colspan="5">&nbsp;</td>
         </tr>
         <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
-            <td colspan="5">Status zgłoszenia: {{ product.get_status_name }}</td>
+            <td colspan="5">Status zgłoszenia: {{ product.last_comment.get_status }}</td>
         </tr>
         <tr>
             <td colspan="5">
@@ -90,7 +110,7 @@
         <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
             <td colspan="5">Historia zgłoszenia</td>
         </tr>
-        {% for comment in comment_list %}
+        {% for comment in product.comment_set.all %}
         <tr>
             <td style="border-bottom: 1px solid black; width: 200px;">{{ comment.created }}</td>
             <td style="border-bottom: 1px solid black; text-align: left; width: 200px;">{{ comment.user }}</td>
@@ -112,7 +132,7 @@
         <tr>
             <td colspan="2" style="margin-left: 10px;">czytelny podpis klienta</td>
             <td></td>
-            <td colspan="2" style="text-align: right; margin-right: 10px;">pracownik: {{ product.user }}</td>
+            <td colspan="2" style="text-align: right; margin-right: 10px;">pracownik: {{ user.get_full_name }}</td>
         </tr>
         <tr>
             <td colspan="5">&nbsp;</td>
