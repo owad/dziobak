@@ -88,7 +88,7 @@ class Product(ABM):
 
     @property
     def serviced_by(self):
-        employee = Comment.objects.filter(product=self, status=20)
+        employee = Comment.objects.filter(product=self, status=Comment.S20)
         if employee:
             return employee[0].user
         return '-'
@@ -96,10 +96,15 @@ class Product(ABM):
 class Comment(ABM):
 
     # Statuses
-    STATUSES = [(10, 'przyjęty'),
-              (20, 'w realizacji'),
-              (30, 'do wydania'),
-              (40, 'wydany')]
+    S10 = 10
+    S20 = 20
+    S30 = 30
+    S40 = 40
+    
+    STATUSES = [(S10, 'przyjęty'),
+              (S20, 'w realizacji'),
+              (S30, 'do wydania'),
+              (S40, 'wydany')]
 
     STATUS_KEYS = [key for key, name in STATUSES]
 

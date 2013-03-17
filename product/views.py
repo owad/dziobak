@@ -8,12 +8,44 @@ from product.models import Product, Courier, Comment
 from product.forms import ProductCreateForm, ProductUpdateForm, CommentCreateForm
 from cs_user.models import User
 
+# pdf imports
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.template import Context
+import ho.pisa as pisa
+import cStringIO as StringIO
+import cgi
+
 
 class ProductDetail(DetailView):
     context_object_name = 'product'
     model = Product
 
 product_detail = ProductDetail.as_view()
+
+
+class ProductPdf(ProductDetail):
+    template_name = 'product/product_pdf.html'
+
+    def write_pdf(self, template_src, context_dict):
+        template = get_template(template_src)
+        context = Context(context_dict)
+        context['product'] = self.get_object()
+        context['client'] = self.get_object().user
+        context['user'] = self.request.user
+
+        html  = template.render(context)
+        result = StringIO.StringIO()
+        pdf = pisa.pisaDocument(StringIO.StringIO(
+            html.encode("UTF-8")), result)
+        if not pdf.err:
+            return HttpResponse(result.getvalue(), mimetype='application/pdf')
+        return HttpResponse('Gremlins ate your pdf! %s' % cgi.escape(html))
+    
+    def get(self, request, *args, **kwargs):
+        return self.write_pdf(self.template_name, {'pagesize' : 'A4'})
+
+product_pdf = ProductPdf.as_view()
 
 
 class ProductList(ListView):
@@ -41,9 +73,9 @@ class ProductCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = User.objects.get(pk=self.kwargs['user_pk'])
-        form.instance.status = Comment.STATUS[10]
+        form.instance.status = Comment.S10
         product = form.save()
-        comment = Comment(product=product, user=self.request.user, status=Comment.STATUS[10]).save()
+        comment = Comment(product=product, user=self.request.user, status=Comment.S10).save()
         return super(ProductCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
