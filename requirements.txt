@@ -1,0 +1,8 @@
+Django==1.5
+South==0.7.6
+argparse==1.2.1
+html5lib==0.95
+ipython==0.13.1
+pisa==3.0.33
+reportlab==2.6
+wsgiref==0.1.2
