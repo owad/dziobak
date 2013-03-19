@@ -96,6 +96,9 @@ class Product(ABM):
     def get_status(self):
         return dict(Comment.STATUSES)[self.status]
 
+    def get_name(self):
+        return ', '.join(set([self.name, self.producent]))
+
     @property
     def last_comment(self):
         return Comment.objects.filter(product=self).order_by('-pk')[0]

@@ -39,10 +39,6 @@ ul.nav {
     font-size: 18px;
 }
 
-ul.nav li {
-    margin-top: 3px;
-}
-
 div.content input, div.content textarea {
     width: 400px;
 }
@@ -55,11 +51,16 @@ thead tr td {
     font-weight: bold;
 }
 
-.middle {
-    padding: 0px 5px;
-}
-
 #login-form {
     width:350px;
     margin: 0 auto
 }
+
+div.input-append {
+    margin-bottom: 0px;
+}
+
+#search-form {
+    margin-top: 5px; 
+}
+
