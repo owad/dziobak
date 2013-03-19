@@ -21,7 +21,7 @@
         {% if user.pk %}
         <div class="row top">
             <div class="span7">
-                <h1><img src="{{ user.company.logo.url }}" style="margin-right: 10px; height: 80px;"/>{{ user.company }}</h1>
+                <h1>{% if user.company.logo %}<img src="{{ user.company.logo.url }}" style="margin-right: 10px; height: 80px;"/> {% endif %}{{ user.company }}</h1>
             </div>
             
             <div class="span10 right">
