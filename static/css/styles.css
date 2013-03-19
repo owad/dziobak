@@ -9,8 +9,6 @@ body, th, td {
 }
 
 .container {
-    display: block;
-    width: 80%;
 }
 
 .center {
@@ -23,6 +21,10 @@ body, th, td {
 
 .right {
     text-align: right;
+}
+
+.fleft {
+    float: left;
 }
 
 .fright {
@@ -57,3 +59,7 @@ thead tr td {
     padding: 0px 5px;
 }
 
+#login-form {
+    width:350px;
+    margin: 0 auto
+}

@@ -3,29 +3,33 @@
 {% block top %}{% endblock %}
 {% block menu %}{% endblock %}
 
-{% block content %}
+{% block main %}
 
-{% if form.errors %}
-<p class="errorlist">Błędna nazwa użytkownika lub hasło. Spróbuj ponownie.</p>
-{% endif %}
-<div class="login-form">
-    <form method="post" action="">
-        {% csrf_token %}
-            <table>
-                <tr>
-                    <th>{{ form.username.label_tag }}</th>
-                    <td>{{ form.username }}</td>
-                </tr>
-                <tr>
-                    <th>{{ form.password.label_tag }}</th>
-                    <td>{{ form.password }}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input class="btn" type="submit" value="zaloguj" /></td>
-                <tr>
-            </table>
-    </form>
-</div>
+
+<form method="post" action="" id="login-form">
+    {% csrf_token %}
+        <h2 class="center">Dziobak</h2>
+        <table>
+            <tr>
+                <th>{{ form.username.label_tag }}</th>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr>
+                <th>{{ form.password.label_tag }}</th>
+                <td>{{ form.password }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    {% if form.errors %}
+                    <p class="errorlist">Błędna nazwa użytkownika lub hasło. Spróbuj ponownie.</p>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="center"><input class="btn" type="submit" value="zaloguj" /></td>
+            <tr>
+        </table>
+</form>
 {% endblock %}
 

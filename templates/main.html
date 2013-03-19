@@ -16,25 +16,23 @@
     </script>
 </head>
 <body>
-    <div class="container">
     {% block main %}
+    <div class="container">
         {% if user.pk %}
-        <div class="row top">
-            <div class="span7">
+        <div class="row">
+            <div class="fleft">
                 <h1>{% if user.company.logo %}<img src="{{ user.company.logo.url }}" style="margin-right: 10px; height: 80px;"/> {% endif %}{{ user.company }}</h1>
             </div>
-            
-            <div class="span10 right">
-                <div>zalogowany jako {{ user }}</div>
-                <div>Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}</div>
-            </div>
-            <div class="span2 right btn-group">
-                <a class="btn" href="{% url 'user_update' user.pk %}">profil</a>
-                <a class="btn" href="{% url 'cs_logout' %}">wyloguj</a>
+            <div class="fright">
+                <div>zalogowany jako {{ user }}. Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}</div>
+                <div class="fright btn-group">
+                    <a class="btn" href="{% url 'user_update' user.pk %}">profil</a>
+                    <a class="btn" href="{% url 'cs_logout' %}">wyloguj</a>
+                </div>
             </div>
         </div>
 
-        <div class="row middle">
+        <div class="row">
             <div class="navbar">
                 <div class="navbar-inner">
                     <ul class="nav">
@@ -58,7 +56,7 @@
             </div>
         </div>
 
-        <div class="row bottom">
+        <div class="row">
         {% endif %}
         <h2>{% block heading %}{% endblock %}</h2>
             <div class="content">
@@ -66,8 +64,8 @@
             {% endblock %}
             </div>
         </div>
-    </div>
     {% endblock %}
+    </div>
 </body>
 </html>
 

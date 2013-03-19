@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'^$', 'product.views.product_list', name='home'),
 
     url(r'^zaloguj/$', login, {'template_name': 'registration/login.html'}, name='cs_login'),
-    url(r'^wyloguj/$', logout, {'template_name': 'registration/logout.html'}, name='cs_logout'),
+    url(r'^wyloguj/$', logout, {'template_name': 'registration/logout.html', 'next_page': '/'}, name='cs_logout'),
 
     # clients
     url(r'^klient/', include('cs_user.urls')),

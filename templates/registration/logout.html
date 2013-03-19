@@ -4,10 +4,5 @@
 {% block menu %}{% endblock %}
 
 {% block content %}
-
-{% if form.errors %}
-<p>Błędna nazwa użytkownika lub hasło. Spróbuj ponownie.</p>
-{% endif %}
-<a class="button" href="{% url 'cs_login' %}?next={% url 'home' %}">zaloguj ponownie</a>
 {% endblock %}
 
