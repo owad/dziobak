@@ -22,7 +22,6 @@ user_detail = UserDetail.as_view()
 
 class UserList(ListView):
     context_object_name = 'clients'
-    queryset = User.objects.all()
     paginate_by = ROWS_PER_PAGE
 
     def get_context_data(self, **kwargs):
@@ -34,7 +33,7 @@ class UserList(ListView):
         q = self.request.GET.get('q', None)
         if q:
             return User.objects.search(q)
-        return self.queryset
+        return User.objects.all()
 
 user_list = UserList.as_view()
     

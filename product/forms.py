@@ -8,7 +8,7 @@ class ProductCreateForm(ModelForm):
 
     class Meta:
         model = Product
-        exclude = ('user', 'modified', 'status', 'key')
+        exclude = ('user', 'company', 'modified', 'status', 'key')
 
 
 class ProductUpdateForm(ProductCreateForm):

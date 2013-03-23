@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils.datastructures import SortedDict
 
 from base.models import AbstractBaseModel as ABM
+from base.utils import get_company
 
 
 class Company(ABM):
@@ -30,15 +31,23 @@ class UserManager(DjangoUserManager):
         user.save()
         return user
 
-
-    def search(self, qs):
-        return self.filter(
+    def search(self, qs, *args, **kwargs):
+        return self.get_queryset(*args, **kwargs).filter(
             Q(first_name__icontains=qs) |
             Q(last_name__icontains=qs) |
             Q(company_name__icontains=qs) |
             Q(city__icontains=qs) |
             Q(postcode__icontains=qs) |
             Q(primary_phone__icontains=qs))        
+
+
+    def get_query_set(self):
+        company = get_company()
+        queryset = super(UserManager, self).get_query_set()
+        if company:
+            return queryset.filter(company=company)
+        return queryset
+
 
 class User(AbstractUser):
 

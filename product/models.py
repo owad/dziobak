@@ -6,8 +6,10 @@ from django.db.models import Manager, Q
 from django.core.urlresolvers import reverse
 
 from product.constants import *
-from cs_user.models import User
+from cs_user.models import User, Company
 from base.models import AbstractBaseModel as ABM
+from base.utils import get_company
+
 
 class Courier(ABM):
     
@@ -22,14 +24,21 @@ class Courier(ABM):
 
 
 class ProductManager(Manager):
-    
-    def search(self, qs):
-        return self.filter(
+
+    def search(self, qs, *args, **kwargs):
+        return self.get_queryset(*args, **kwargs).filter(
             Q(name__icontains=qs) |
             Q(producent__icontains=qs) |
             Q(serial__icontains=qs) |
             Q(invoice__icontains=qs) |
             Q(key__icontains=qs))        
+
+    def get_query_set(self):
+        company = get_company()
+        queryset = super(ProductManager, self).get_query_set()
+        if company:
+            return queryset.filter(company=company)
+        return queryset
 
 
 class Product(ABM):
@@ -42,6 +51,7 @@ class Product(ABM):
     warranty = models.CharField(max_length=8, default='nie', choices=[('nie', 'Nie'), ('tak', 'Tak')], verbose_name='gwarancja')
     status = models.CharField(max_length=64, verbose_name='status')
     user = models.ForeignKey(User)  # client (not an emplyee)
+    company = models.ForeignKey(Company)
 
     key = models.IntegerField(verbose_name=u'numer zgłoszenia')
 

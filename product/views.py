@@ -51,7 +51,6 @@ product_pdf = ProductPdf.as_view()
 
 class ProductList(ListView):
     context_object_name = 'products'
-    queryset = Product.objects.all()
     paginate_by = ROWS_PER_PAGE
 
     def get_context_data(self, **kwargs):
@@ -60,10 +59,11 @@ class ProductList(ListView):
         return context
 
     def get_queryset(self):
+        Product.objects.company = self.request.user.company
         q = self.request.GET.get('q', None)
         if q:
             return Product.objects.search(q)
-        return self.queryset
+        return Product.objects.all()
  
 product_list = ProductList.as_view()
     
@@ -74,6 +74,7 @@ class ProductCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = User.objects.get(pk=self.kwargs['user_pk'])
+        form.instance.company = self.request.user.company
         form.instance.status = Comment.S10
         product = form.save()
         comment = Comment(product=product, user=self.request.user, status=Comment.S10).save()
