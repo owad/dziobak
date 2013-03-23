@@ -8,7 +8,6 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <td>ID</td>
                 <td>Klient</td>
                 <td>Firma</td>
                 <td>Adres</td>
@@ -21,7 +20,6 @@
         <tbody>
         {% for c in clients %}
             <tr>
-                <td>{{ c.pk }}</td>
                 <td><a href="{{ c.get_absolute_url }}">{{ c.get_full_name }}</a></td>
                 <td>{{ c.company_name|default:'-' }}</td>
                 <td>{{ c.address|default:'-' }}</td>

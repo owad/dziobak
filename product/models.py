@@ -26,7 +26,7 @@ class Courier(ABM):
 class ProductManager(Manager):
 
     def search(self, qs, *args, **kwargs):
-        return self.get_queryset(*args, **kwargs).filter(
+        return self.get_query_set(*args, **kwargs).filter(
             Q(name__icontains=qs) |
             Q(producent__icontains=qs) |
             Q(serial__icontains=qs) |

@@ -32,7 +32,7 @@ class UserManager(DjangoUserManager):
         return user
 
     def search(self, qs, *args, **kwargs):
-        return self.get_queryset(*args, **kwargs).filter(
+        return self.get_query_set(*args, **kwargs).filter(
             Q(first_name__icontains=qs) |
             Q(last_name__icontains=qs) |
             Q(company_name__icontains=qs) |
