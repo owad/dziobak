@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^klient/', include('cs_user.urls')),
 
     # employees
-    url(r'^pracownik/zmien_haslo$', 'user_password_change', name='user_password_reset'),
+    url(r'^pracownik/zresetuj_haslo$', 'cs_user.views.user_password_reset', name='user_password_reset'),
 
     # products
     url(r'^zgloszenie/', include('product.urls')),

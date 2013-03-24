@@ -2,7 +2,7 @@
     <th></th>
     <td>
         <button type="button" class="btn" onclick="window.history.back();">wstecz</button>
-        <button type="submit" class="btn">zapisz</button>
+        <button type="submit" class="btn">{% if post_label %}{{ post_label }}{% else %}zapisz{% endif %}</button>
     </td>
 </tr>
 

@@ -1,9 +1,10 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
-from django.contrib.auth.views import password_change
+from django.contrib.auth.views import password_reset
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
 
 from cs.settings import ROWS_PER_PAGE
 from cs_user.models import User
@@ -60,14 +61,16 @@ class UserUpdate(UpdateView):
 user_update = UserUpdate.as_view()
 
 
-def user_password_change(request):
+def user_password_reset(request):
 
-    template_name='registration/password_change_form.html'
-    post_change_redirect = reverse('user_detail', kwargs={'pk': request.user.pk})
+    template_name='registration/password_reset_form.html'
+    post_reset_redirect = reverse('user_detail', kwargs={'pk': request.user.pk})
 
-    return password_change(request,
-                           template_name=template_name,
-                           post_change_redirect=post_change_redirect,
-                           password_change_form=PasswordChangeForm,
-                           current_app=None, extra_context=None)
+    return password_reset(request,
+                   template_name=template_name,
+                   email_template_name='registration/password_reset_email.html',
+                   subject_template_name='registration/password_reset_subject.txt',
+                   password_reset_form=PasswordResetForm,
+                   token_generator=default_token_generator,
+                   post_reset_redirect=post_reset_redirect)
 
