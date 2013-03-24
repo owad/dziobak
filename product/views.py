@@ -71,6 +71,7 @@ product_list = ProductList.as_view()
 class ProductCreate(CreateView):
     form_class = ProductCreateForm
     template_name = 'product/product_create_or_update.html'    
+    context_object_name = 'product'
 
     def form_valid(self, form):
         form.instance.user = User.objects.get(pk=self.kwargs['user_pk'])
@@ -91,12 +92,13 @@ product_create = ProductCreate.as_view()
 class ProductUpdate(UpdateView):
     form_class = ProductUpdateForm
     template_name = 'product/product_create_or_update.html'    
+    context_object_name = 'product'
   
     def get_object(self):
         return get_object_or_404(Product, pk=self.kwargs['pk'])
  
     def get_context_data(self, **kwargs):
-        context = super(ProductCreate, self).get_context_data(**kwargs)
+        context = super(ProductUpdate, self).get_context_data(**kwargs)
         context['client'] = get_object_or_404(User, pk=self.kwargs['user_pk'])
         return context
 

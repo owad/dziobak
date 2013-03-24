@@ -1,9 +1,11 @@
 # -* - coding: utf-8 -*-
+import logging
 from datetime import datetime, timedelta
 
 from django.db import models
 from django.db.models import Manager, Q
 from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_save
 
 from product.constants import *
 from cs_user.models import User, Company
@@ -50,10 +52,12 @@ class Product(ABM):
     description = models.TextField(verbose_name='opis usterki')
     warranty = models.CharField(max_length=8, default='nie', choices=[('nie', 'Nie'), ('tak', 'Tak')], verbose_name='gwarancja')
     status = models.CharField(max_length=64, verbose_name='status')
+    max_cost = models.FloatField(default=0.0, verbose_name='maksymalny koszt naprawy')
+
     user = models.ForeignKey(User)  # client (not an emplyee)
     company = models.ForeignKey(Company)
 
-    key = models.IntegerField(verbose_name=u'numer zgłoszenia')
+    key = models.IntegerField(verbose_name=u'numer zgłoszenia', default=0)
 
     objects = ProductManager()
     
@@ -67,15 +71,6 @@ class Product(ABM):
 
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'pk': self.pk, 'user_pk': self.user.pk})
-
-    def save(self):
-        last = Product.objects.filter(user__company=self.user.company, created__year=datetime.now().year).order_by('-pk')
-        key = 1
-        if last:
-            key = last[0].key + 1
-
-        self.key = key
-        return super(Product, self).save()
 
     def __unicode__(self):
         return "%s/%s" % (self.created.year, str(self.key).zfill(4))
@@ -103,11 +98,16 @@ class Product(ABM):
             return employee[0].user
         return '-'
 
+    @property
     def get_status(self):
         return dict(Comment.STATUSES)[self.status]
 
+
+    @property
     def get_name(self):
-        return ', '.join(set([self.name, self.producent]))
+        if self.producent:
+            return ', '.join([self.name, self.producent])
+        return self.name
 
     @property
     def last_comment(self):
@@ -154,4 +154,18 @@ class Comment(ABM):
     @property
     def cost(self):
         return self.cost_service + self.cost_hardware + self.cost_transport
+
+
+def update_key(instance, **kwargs):
+    if not instance.pk:
+        last = Product.objects.filter(created__year=datetime.now().year).order_by('-pk')
+        key = 1
+        try:
+            key = last[0].key
+        except IndexError:
+            pass
+
+        instance.key = key + 1
+
+pre_save.connect(update_key, sender=Product)
 
