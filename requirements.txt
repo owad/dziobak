@@ -1,6 +1,7 @@
 Django==1.5
 South==0.7.6
 argparse==1.2.1
+django-request-provider==1.0.2
 html5lib==0.95
 ipython==0.13.1
 pisa==3.0.33
