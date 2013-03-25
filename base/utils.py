@@ -14,3 +14,10 @@ def get_company():
 
     return company
 
+
+def get_user():
+    request = get_request()
+    if not request:
+        return None
+    return request.user
+

@@ -1,3 +1,4 @@
+# -* - coding: utf-8 -*-
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
@@ -5,10 +6,11 @@ from django.contrib.auth.views import password_reset
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 
 from cs.settings import ROWS_PER_PAGE
 from cs_user.models import User
-from cs_user.forms import UserCreateForm, UserUpdateForm
+from cs_user.forms import UserCreateForm, UserUpdateForm, EmployeeUpdateForm
 
 
 class UserDetail(DetailView):
@@ -32,9 +34,10 @@ class UserList(ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q', None)
+        queryset = User.objects.filter(role__in=User.CLIENT_KEYS)
         if q:
-            return User.objects.search(q)
-        return User.objects.all()
+            return queryset.search(q)
+        return queryset
 
 user_list = UserList.as_view()
     
@@ -59,6 +62,22 @@ class UserUpdate(UpdateView):
         return get_object_or_404(User, pk=self.kwargs['pk'])
 
 user_update = UserUpdate.as_view()
+
+
+class EmployeeUpdate(UserUpdate):
+    form_class = EmployeeUpdateForm
+    template_name = 'cs_user/employee_create_or_update.html'
+
+    def get_object(self):
+        return self.request.user
+
+
+    def get_success_url(self):
+        url = super(EmployeeUpdate, self).get_success_url()
+        messages.add_message(self.request, messages.SUCCESS, 'Dane zostały zaktualizowane')
+        return url
+
+employee_update = EmployeeUpdate.as_view()
 
 
 def user_password_reset(request):

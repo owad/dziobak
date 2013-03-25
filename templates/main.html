@@ -26,7 +26,7 @@
             <div class="fright">
                 <div>zalogowany jako {{ user }}. Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}</div>
                 <div class="fright btn-group">
-                    <a class="btn" href="{% url 'user_update' user.pk %}">profil</a>
+                    <a class="btn {% block nav_employee_update %}{% endblock %}" href="{% url 'employee_update' %}">profil</a>
                     <a class="btn" href="{% url 'cs_logout' %}">wyloguj</a>
                 </div>
             </div>
@@ -57,6 +57,15 @@
         </div>
 
         <div class="row">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} fade in">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
         {% endif %}
         <h2>{% block heading %}{% endblock %}</h2>
             <div class="content">

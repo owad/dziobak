@@ -9,6 +9,8 @@ from django.utils.datastructures import SortedDict
 from base.models import AbstractBaseModel as ABM
 from base.utils import get_company
 
+import logging
+
 
 class Company(ABM):
 
@@ -28,6 +30,7 @@ class UserManager(DjangoUserManager):
     def create_superuser(self, username, email, password, **extra_fields):
         user = super(UserManager, self).create_superuser(username, email, password, **extra_fields)
         user.company, _ = Company.objects.get_or_create(name='Admins')
+        user.role = User.EMPLOYEE
         user.save()
         return user
 
@@ -64,6 +67,13 @@ class User(AbstractUser):
         (CLIENT_WITH_ACCESS, 'Klient z dostępem do zleceń'),
         (CLIENT, 'Zwykły klient')]
 
+    EMPLOYEES = [
+        (EMPLOYEE, 'pracownik'),
+    ]
+
+    CLIENT_KEYS = [CLIENT_WITH_ACCESS, CLIENT]
+    EMPLOYEE_KEYS = [EMPLOYEE]
+
     objects = UserManager()
 
     class Meta:
@@ -92,7 +102,10 @@ class User(AbstractUser):
         return ', '.join(data).strip(', ')
 
     def get_absolute_url(self):
-        return reverse('user_detail', kwargs={'pk': self.pk})
+        if self.role in User.CLIENT_KEYS:
+            return reverse('user_detail', kwargs={'pk': self.pk})
+        else:
+            return reverse('employee_update')
 
     def get_details_list(self):
         fields = ['company_name', 'address', 'city', 'postcode', 'primary_phone', 'secondary_phone']

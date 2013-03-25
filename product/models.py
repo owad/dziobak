@@ -159,13 +159,11 @@ class Comment(ABM):
 def update_key(instance, **kwargs):
     if not instance.pk:
         last = Product.objects.filter(created__year=datetime.now().year).order_by('-pk')
-        key = 1
         try:
             key = last[0].key
+            instance.key = key + 1
         except IndexError:
-            pass
-
-        instance.key = key + 1
+            instance.key = 1
 
 pre_save.connect(update_key, sender=Product)
 
