@@ -48,6 +48,7 @@ class UserCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.company = self.request.user.company
+        messages.add_message(self.request, messages.SUCCESS, 'Klient został dodany')
         return super(UserCreate, self).form_valid(form)
 
 user_create = UserCreate.as_view()
@@ -60,6 +61,10 @@ class UserUpdate(UpdateView):
 
     def get_object(self):
         return get_object_or_404(User, pk=self.kwargs['pk'])
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, 'Klient został zaktualizowanny')
+        return super(UserUpdate, self).form_valid(form)
 
 user_update = UserUpdate.as_view()
 

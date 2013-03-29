@@ -13,7 +13,7 @@
                 <button type="button" class="btn" onclick="window.history.back();">wstecz</button>
                 <button type="submit" name="submit" value="0" class="btn">skomentuj/dodaj sprzęt</button>
                 {% for key, status in product.next_status_choices %}
-                <button type="submit" name="submit" value="{{ key }}" class="btn">{{ status }}</button>
+                <button type="submit" name="submit" value="{{ key }}" class="btn">zmień status na "{{ status }}"</button>
                 {% endfor %}
             </td>
         </tr>

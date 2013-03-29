@@ -1,9 +1,11 @@
+# -* - coding: utf-8 -*-
 import logging
 
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 from cs.settings import ROWS_PER_PAGE
 from product.models import Product, Courier, Comment
@@ -90,6 +92,7 @@ class ProductCreate(CreateView):
         form.instance.status = NEW
         product = form.save()
         comment = Comment(product=product, user=self.request.user, status=NEW).save()
+        messages.add_message(self.request, messages.SUCCESS, 'Zgłoszenie zostało dodane')
         return super(ProductCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -112,6 +115,10 @@ class ProductUpdate(UpdateView):
         context = super(ProductUpdate, self).get_context_data(**kwargs)
         context['client'] = get_object_or_404(User, pk=self.kwargs['user_pk'])
         return context
+
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, 'Zgłoszenie zostało zaktualizowane')
+        return super(ProductUpdate, self).form_valid(form)
 
 product_update = ProductUpdate.as_view()
 
@@ -152,6 +159,7 @@ class CommentCreate(CreateView):
 
         result = super(CommentCreate, self).form_valid(form)        
         product.save()
+        messages.add_message(self.request, messages.SUCCESS, 'Komentarz został dodany')
         return result
 
 comment_create = CommentCreate.as_view()

@@ -1,3 +1,8 @@
+function createAutoClosingAlert(selector, delay) {
+   var alert = $(selector).alert();
+   window.setTimeout(function() { alert.alert('close') }, delay);
+}
+
 $(document).ready(function() {
     $('.search-submit').click(function() {
         var form = $('#search-form');
@@ -11,5 +16,7 @@ $(document).ready(function() {
     });
 
     $('#search-options').removeClass('open');
+
+    createAutoClosingAlert(".alert", 5000);
 });
 
