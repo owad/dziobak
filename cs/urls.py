@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^pracownik/zresetuj_haslo$', 'cs_user.views.user_password_reset', name='user_password_reset'),
 
     # products
-    url(r'^zgloszenie/', include('product.urls')),
+    url(r'^', include('product.urls')),
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),

@@ -3,8 +3,8 @@
 {% block heading %}
     Dane zgłoszenia {{ product }}
     <small>
-        <a title="edytuj dane zgłoszenia" class="btn" href="{% url 'product_update' product.pk product.user.pk %}"><i class="icon-edit"></i></a>
-        <a title="drukuj" class="btn" target="_blank" href="{% url 'product_pdf' product.pk product.user.pk %}"><i class="icon-print"></i></a>
+        <a title="edytuj dane zgłoszenia" class="btn" href="{% url 'product_update' product.user.pk product.pk %}"><i class="icon-edit"></i></a>
+        <a title="drukuj" class="btn" target="_blank" href="{% url 'product_pdf' product.user.pk product.pk %}"><i class="icon-print"></i></a>
     </small>
 {% endblock %}
 
@@ -36,7 +36,7 @@
                 <td>{{ c.cost_hardware }}zł</td>
                 <td>{{ c.cost_transport }}zł</td>
                 <td>{{ c.get_status }}</td>
-                <td>{{ c.user }}</td>
+                <td>{{ c.user.get_full_name }}</td>
             </tr>
         {% endfor %}
         </tbody>
