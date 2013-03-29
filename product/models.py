@@ -51,7 +51,7 @@ class Product(ABM):
     invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
     description = models.TextField(verbose_name='opis usterki')
     warranty = models.CharField(max_length=8, default='nie', choices=[('nie', 'Nie'), ('tak', 'Tak')], verbose_name='gwarancja')
-    status = models.IntegerField(verbose_name='status')
+    status = models.IntegerField(verbose_name='status', default=NEW)
     max_cost = models.FloatField(default=0.0, verbose_name='maksymalny koszt naprawy')
 
     user = models.ForeignKey(User)  # client (not an emplyee)
@@ -95,7 +95,10 @@ class Product(ABM):
 
     @property
     def get_status(self):
-        return STATUS_NAMES[self.status]
+        try:
+            return STATUS_NAMES[self.status]
+        except KeyError:
+            return STATUS_NAMES[NEW]
 
     @property
     def get_name(self):
@@ -109,13 +112,13 @@ class Product(ABM):
 
     def next_status_choices(self):
         ''' return a list of tuples used as forms choices '''
-        logging.warning(self.status)
-        keys = STATUSES_FLOW[self.status]
-        logging.warning(keys)
+        try:
+            keys = STATUSES_FLOW[self.status]
+        except KeyError:
+            keys = STATUSES_FLOW[NEW]
         choices = []
         for k in keys:
             choices.append((k, STATUS_NAMES[k]))
-        logging.warning(choices)
         return choices
 
 
@@ -142,7 +145,6 @@ class Comment(ABM):
         return reverse('product_detail', kwargs={'pk': self.product.pk, 'user_pk': self.product.user.pk})
 
     def get_status(self):
-        logging.warning(self.status)
         return STATUS_NAMES[self.status]
 
     @property

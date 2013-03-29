@@ -10,7 +10,6 @@ $(document).ready(function() {
         form.submit();
     });
 
-    $('#search-options').removeClass('open'); 
-    $(".alert").alert();
+    $('#search-options').removeClass('open');
 });
 

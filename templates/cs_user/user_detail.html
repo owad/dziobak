@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 
 {% block heading %}
-    Dane użytkownika {{ client }}
+    {{ client }}
     <small>
         <a title="edytuj dane użytkownika" class="btn" href="{% url 'user_update' client.pk %}"><i class="icon-edit"></i></a>
     </small>
@@ -9,7 +9,7 @@
 
 {% block content %}
 
-    {% include 'cs_user/user_info.html' with client=client %}
+    {% include 'cs_user/user_info.html' with hide_name=1 %}
     
     <a class="btn" href="{% url 'product_create' client.pk %}">nowe zgłoszenie</a>
 

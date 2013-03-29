@@ -3,6 +3,22 @@
 
 {% block new_comment %}
 <h2>Nowy komentarz</h2>
-{% include 'generic/create_or_update.html' %}
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <th></th>
+            <td>
+                <button type="button" class="btn" onclick="window.history.back();">wstecz</button>
+                <button type="submit" name="submit" value="0" class="btn">skomentuj/dodaj sprzęt</button>
+                {% for key, status in product.next_status_choices %}
+                <button type="submit" name="submit" value="{{ key }}" class="btn">{{ status }}</button>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+</form>
+
 {% endblock %}
 

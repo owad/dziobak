@@ -68,6 +68,10 @@ div.input-append {
     text-align: center;
 }
 
+li {
+    list-style: none;
+}
+
 li.filter {
     line-height: 10px;
 }

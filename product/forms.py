@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 from django.forms import ModelForm
 
@@ -18,9 +20,7 @@ class ProductUpdateForm(ProductCreateForm):
 
 class CommentCreateForm(ModelForm):
 
-    status = forms.ChoiceField(choices=STATUSES)
-
     class Meta:
         model = Comment
-        exclude = ('user', 'modified', 'product')
-    
+        exclude = ('user', 'modified', 'product', 'status')
+

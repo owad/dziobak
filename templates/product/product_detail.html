@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 
 {% block heading %}
-    Dane zgłoszenia {{ product }}
+    Zgłoszenie {{ product }}
     <small>
         <a title="edytuj dane zgłoszenia" class="btn" href="{% url 'product_update' product.user.pk product.pk %}"><i class="icon-edit"></i></a>
         <a title="drukuj" class="btn" target="_blank" href="{% url 'product_pdf' product.user.pk product.pk %}"><i class="icon-print"></i></a>

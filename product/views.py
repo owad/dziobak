@@ -1,3 +1,5 @@
+import logging
+
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
@@ -6,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from cs.settings import ROWS_PER_PAGE
 from product.models import Product, Courier, Comment
 from product.forms import ProductCreateForm, ProductUpdateForm, CommentCreateForm
-from product.constants import STATUSES_FLOW
+from product.constants import STATUSES_FLOW, NEW, CLOSED
 
 from cs_user.models import User
 
@@ -85,9 +87,9 @@ class ProductCreate(CreateView):
     def form_valid(self, form):
         form.instance.user = User.objects.get(pk=self.kwargs['user_pk'])
         form.instance.company = self.request.user.company
-        form.instance.status = Comment.S10
+        form.instance.status = NEW
         product = form.save()
-        comment = Comment(product=product, user=self.request.user, status=Comment.S10).save()
+        comment = Comment(product=product, user=self.request.user, status=NEW).save()
         return super(ProductCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -128,7 +130,19 @@ class CommentCreate(CreateView):
 
     def get_form(self, form_class):
         form = super(CommentCreate, self).get_form(form_class)
-        form.fields['status'].choices = self.get_product().next_status_choices()
+        submit = self.request.POST.get('submit', None)
+
+        if self.get_product().status == CLOSED:
+            del form.fields['cost_service']
+            del form.fields['cost_hardware']
+            del form.fields['cost_transport']
+
+        if submit and int(submit) > 0:  # status bump
+            form.fields['description'].required = False
+            form.instance.status = int(submit)
+        else:  # just a comment
+            form.instance.status = self.get_product().status 
+            
         return form
 
     def form_valid(self, form):

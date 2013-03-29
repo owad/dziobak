@@ -29,6 +29,7 @@ STATUSES_FLOW = {
     TO_EXT: [AT_EXT],
     AT_EXT: [FROM_EXT],
     FROM_EXT: [PROG, READY],
-    READY: [CLOSED]
+    READY: [CLOSED],
+    CLOSED: []
 }
 
