@@ -132,7 +132,7 @@ class CommentCreate(CreateView):
         form = super(CommentCreate, self).get_form(form_class)
         submit = self.request.POST.get('submit', None)
 
-        if self.get_product().status == CLOSED:
+        if self.get_product().status == CLOSED:  # you can still comment but no more costs after product has been closed
             del form.fields['cost_service']
             del form.fields['cost_hardware']
             del form.fields['cost_transport']
