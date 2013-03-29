@@ -116,7 +116,10 @@ class CommentCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.product = self.get_context_data()['product']
+        product = self.get_context_data()['product']
+        product.save()
+        form.instance.product = product
+        
         return super(CommentCreate, self).form_valid(form)        
 
 comment_create = CommentCreate.as_view()

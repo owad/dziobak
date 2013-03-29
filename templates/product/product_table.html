@@ -21,7 +21,7 @@
             <td><a href="{{ p.get_absolute_url }}">{{ p.get_name }}</a></td>
             <td>{{ p.warranty }}</td>
             <td>{{ p.cost }}zł</td>
-            <td>{{ p.status }}</td>
+            <td>{{ p.get_status }}</td>
             <td>{{ p.user.phone_numbers }}</td>
             <td>{{ p.created }}</td>
             <td>{{ p.serviced_by }}</td>

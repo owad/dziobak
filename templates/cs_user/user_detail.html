@@ -8,14 +8,9 @@
 {% endblock %}
 
 {% block content %}
-    <address>
-        {% for field, value in client.get_details_list %}
-            {% if field != 'klient' %}
-            {{ field }}: {{ value }}<br>
-            {% endif %}
-        {% endfor %}
-    </address>
 
+    {% include 'cs_user/user_info.html' with client=client %}
+    
     <a class="btn" href="{% url 'product_create' client.pk %}">nowe zgłoszenie</a>
 
     {% block product_list %}

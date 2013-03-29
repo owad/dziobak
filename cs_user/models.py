@@ -1,4 +1,7 @@
 # -* - coding: utf-8 -*-
+import re
+import logging
+
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import AbstractUser, UserManager as DjangoUserManager
@@ -8,8 +11,6 @@ from django.utils.datastructures import SortedDict
 
 from base.models import AbstractBaseModel as ABM
 from base.utils import get_company
-
-import logging
 
 
 class Company(ABM):
@@ -107,21 +108,19 @@ class User(AbstractUser):
         else:
             return reverse('employee_update')
 
-    def get_details_list(self):
-        fields = ['company_name', 'address', 'city', 'postcode', 'primary_phone', 'secondary_phone']
-        data = []
-
-        data.append(('klient', self.get_full_name()))
-
-        for field in fields:
-            value = getattr(self, field, None)
-            if value:
-                data.append((self._meta.get_field(field).verbose_name, value))
-        return data
-
     @property
     def phone_numbers(self):
         if self.secondary_phone:
             return "%s, %s" % (self.primary_phone, self.secondary_phone)
         return self.primary_phone
+
+
+    def save(self):
+        if self.company_name:
+            username = self.company_name
+        else:
+            username = self.get_full_name()
+
+        self.username = re.sub(r'\W+', '', username).lower()
+        return super(User, self).save()
 

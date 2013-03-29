@@ -74,18 +74,10 @@ class Product(ABM):
 
     def __unicode__(self):
         return "%s/%s" % (self.created.year, str(self.key).zfill(4))
-    
-    def get_details_list(self):
-        fields = ['name', 'producent', 'serial', 'invoice', 'description', 'waranty', 'status']
-        data = []
 
-        data.append(('klient', self.user.get_full_name()))
-
-        for field in fields:
-            value = getattr(self, field, None)
-            if value:
-                data.append((self._meta.get_field(field).verbose_name, value))
-        return data
+    def save(self):
+        self.status = self.comment_set.latest('pk').status
+        return super(Product, self).save()        
 
     @property
     def cost(self):
@@ -95,12 +87,12 @@ class Product(ABM):
     def serviced_by(self):
         employee = Comment.objects.filter(product=self, status=Comment.S20)
         if employee:
-            return employee[0].user
+            return employee[0].user.get_full_name()
         return '-'
 
     @property
     def get_status(self):
-        return dict(Comment.STATUSES)[self.status]
+        return dict(Comment.STATUSES)[int(self.status)]
 
 
     @property

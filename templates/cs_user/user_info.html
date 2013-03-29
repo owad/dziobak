@@ -1,0 +1,9 @@
+<address>
+    <div>klient: <a href="{{ client.get_absolute_url }}">{{ client }}</a></div>
+    <div>address: {{ client.address|default:"-" }}</div>
+    <div>miejscowość: {{ client.city|default:"-" }}</div>
+    <div>kod pocztowy: {{ client.postcode|default:"-" }}</div>
+    <div>telefon: {{ client.phone_numbers }}</div>
+    <div></div>
+</address>
+

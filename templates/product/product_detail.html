@@ -10,19 +10,7 @@
 
 {% block content %}
     {% block product_details %}
-    <div>
-        {% for field, value in product.get_details_list %}
-            {{ field }}:
-            {% if field == 'klient' %}
-                <a href="{{ product.user.get_absolute_url }}">{{ value }}</a>
-            {% elif field == 'nazwa' %}
-                <a href="{{ product.get_absolute_url }}">{{ value }}</a>
-            {% else %}
-                {{ value }}
-            {% endif %}
-            <br/>
-        {% endfor %}
-    </div>
+    {% include 'product/product_info.html' %}
     {% endblock %}
 
     {% block comments %}
