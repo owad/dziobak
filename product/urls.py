@@ -5,6 +5,7 @@ urlpatterns = patterns('product.views',
 
     # products
     url(r'^lista$', 'product_list', name='product_list'),
+    url(r'^lista/(?P<status>\d+)$', 'product_list',  name='product_list'),
     url(r'^(?P<pk>\d+)/klient/(?P<user_pk>\d+)$', 'product_detail', name='product_detail'),
     url(r'^(?P<pk>\d+)/klient/(?P<user_pk>\d+)/pdf$', 'product_pdf', name='product_pdf'),
     url(r'^nowe/(?P<user_pk>\d+)', 'product_create', name='product_create'),

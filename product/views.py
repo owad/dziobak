@@ -56,15 +56,22 @@ class ProductList(ListView):
     def get_context_data(self, **kwargs):
         context = super(ProductList, self).get_context_data(**kwargs)
         context['q'] = self.request.GET.get('q', '')
+        context['status_filter'] = int(self.kwargs.get('status', 0))
         return context
 
     def get_queryset(self):
         Product.objects.company = self.request.user.company
         q = self.request.GET.get('q', None)
         if q:
-            return Product.objects.search(q)
-        return Product.objects.all()
- 
+            queryset = Product.objects.search(q)
+        else: 
+            queryset = Product.objects.all()
+
+        status = self.kwargs.get('status', None)
+        if status:
+            queryset = queryset.filter(status=status)
+        return queryset 
+
 product_list = ProductList.as_view()
     
 

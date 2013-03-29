@@ -26,6 +26,11 @@ class Company(ABM):
         return self.name
 
 
+    def statuses(self):
+        from product.models import Comment
+        return Comment.STATUSES
+               
+
 class UserManager(DjangoUserManager):
 
     def create_superuser(self, username, email, password, **extra_fields):
