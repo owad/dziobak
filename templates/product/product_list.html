@@ -6,11 +6,11 @@
 
 {% block content %}
     <div class="navbar">
-        <div class="navbar-inner">
+        <div class="navbar-inner filters">
             <ul class="nav">
-                <li class="{% if not status_filter %}active{% endif %}"><a href="{% url 'product_list' %}">wszystkie</a></li>
+                <li class="filter {% if not status_filter %}active{% endif %}"><a href="{% url 'product_list' %}">wszystkie</a></li>
                 {% for key, status in user.company.statuses %}
-                <li class="{% if key == status_filter %}active{% endif %}"><a href="{% url 'product_list' key %}">{{ status }}</a></li>
+                <li class="filter {% if key == status_filter %}active{% endif %}"><a href="{% url 'product_list' key %}">{{ status }}</a></li>
                 {% endfor %}
             </ul>
         </div>

@@ -27,6 +27,10 @@ class Company(ABM):
     def __unicode__(self):
         return self.name
 
+    @property
+    def statuses(self):
+        return STATUSES
+
 
 class UserManager(DjangoUserManager):
 

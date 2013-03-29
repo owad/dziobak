@@ -13,9 +13,9 @@ STATUSES = [
     (NEW, 'przyjęty'),
     (PROG, 'w realizacji'),
     (TO_EXT, 'do wysłania'),
-    (AT_EXT, 'w serwisie zewnętrznym'),
-    (FROM_EXT, 'odebrano z serwisu zewnętrznego'),
-    (READY, 'do wydania'),
+#    (AT_EXT, 'w serwisie zewnętrznym'),
+#    (FROM_EXT, 'odebrano z serwisu zewnętrznego'),
+#    (READY, 'do wydania'),
     (CLOSED, 'wydany')]
 
 STATUS_NAMES = dict(STATUSES)

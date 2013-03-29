@@ -67,3 +67,12 @@ div.input-append {
 .pagination {
     text-align: center;
 }
+
+li.filter {
+    line-height: 10px;
+}
+
+div.filters {
+    min-height: 30px;    
+}
+
