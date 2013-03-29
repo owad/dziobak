@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404
 from cs.settings import ROWS_PER_PAGE
 from product.models import Product, Courier, Comment
 from product.forms import ProductCreateForm, ProductUpdateForm, CommentCreateForm
+from product.constants import STATUSES_FLOW
+
 from cs_user.models import User
 
 # pdf imports
@@ -116,18 +118,27 @@ class CommentCreate(CreateView):
     form_class = CommentCreateForm
     template_name = 'product/comment_create_or_update.html'
 
+    def get_product(self):
+        return get_object_or_404(Product, pk=self.kwargs['product_pk'])
+
     def get_context_data(self, **kwargs):
         context = super(CommentCreate, self).get_context_data(**kwargs)
-        context['product'] = get_object_or_404(Product, pk=self.kwargs['product_pk'])
+        context['product'] = self.get_product()
         return context
+
+    def get_form(self, form_class):
+        form = super(CommentCreate, self).get_form(form_class)
+        form.fields['status'].choices = self.get_product().next_status_choices()
+        return form
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         product = self.get_context_data()['product']
-        product.save()
         form.instance.product = product
-        
-        return super(CommentCreate, self).form_valid(form)        
+
+        result = super(CommentCreate, self).form_valid(form)        
+        product.save()
+        return result
 
 comment_create = CommentCreate.as_view()
 

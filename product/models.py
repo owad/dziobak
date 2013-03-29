@@ -51,7 +51,7 @@ class Product(ABM):
     invoice = models.CharField(max_length=128, blank=True, verbose_name='numer faktury')
     description = models.TextField(verbose_name='opis usterki')
     warranty = models.CharField(max_length=8, default='nie', choices=[('nie', 'Nie'), ('tak', 'Tak')], verbose_name='gwarancja')
-    status = models.CharField(max_length=64, verbose_name='status')
+    status = models.IntegerField(verbose_name='status')
     max_cost = models.FloatField(default=0.0, verbose_name='maksymalny koszt naprawy')
 
     user = models.ForeignKey(User)  # client (not an emplyee)
@@ -95,7 +95,7 @@ class Product(ABM):
 
     @property
     def get_status(self):
-        return dict(STATUSES)[int(self.status)]
+        return STATUS_NAMES[self.status]
 
     @property
     def get_name(self):
@@ -107,9 +107,16 @@ class Product(ABM):
     def last_comment(self):
         return Comment.objects.filter(product=self).order_by('-pk')[0]
 
-
-    def next_statuses(self):
-        return STATUSES_FLOW[self.status]
+    def next_status_choices(self):
+        ''' return a list of tuples used as forms choices '''
+        logging.warning(self.status)
+        keys = STATUSES_FLOW[self.status]
+        logging.warning(keys)
+        choices = []
+        for k in keys:
+            choices.append((k, STATUS_NAMES[k]))
+        logging.warning(choices)
+        return choices
 
 
 class Comment(ABM):
@@ -117,7 +124,7 @@ class Comment(ABM):
     description = models.TextField(verbose_name='komentarz')
     product = models.ForeignKey('Product')
     user = models.ForeignKey(User)  # employee (determines who is an owner of a product)
-    status = models.IntegerField(choices=STATUSES, verbose_name='status')
+    status = models.IntegerField(verbose_name='status')
 
     cost_service = models.FloatField(default=0.0, verbose_name='koszt usługi')
     cost_hardware = models.FloatField(default=0.0, verbose_name='koszt sprzętu')

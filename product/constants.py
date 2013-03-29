@@ -18,8 +18,7 @@ STATUSES = [
     (READY, 'do wydania'),
     (CLOSED, 'wydany')]
 
-STATUS_KEYS = [key for key, name in STATUSES]
-
+STATUS_NAMES = dict(STATUSES)
 
 # Custom statuses flow
 
