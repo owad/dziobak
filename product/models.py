@@ -142,7 +142,8 @@ class Comment(ABM):
         return reverse('product_detail', kwargs={'pk': self.product.pk, 'user_pk': self.product.user.pk})
 
     def get_status(self):
-        return dict(STATUSES)[self.status]
+        logging.warning(self.status)
+        return STATUS_NAMES[self.status]
 
     @property
     def cost(self):
