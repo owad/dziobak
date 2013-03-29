@@ -88,15 +88,14 @@ class Product(ABM):
 
     @property
     def serviced_by(self):
-        employee = Comment.objects.filter(product=self, status=Comment.S20)
+        employee = Comment.objects.filter(product=self, status=PROG)
         if employee:
             return employee[0].user.get_full_name()
         return '-'
 
     @property
     def get_status(self):
-        return dict(Comment.STATUSES)[int(self.status)]
-
+        return dict(STATUSES)[int(self.status)]
 
     @property
     def get_name(self):
@@ -108,20 +107,12 @@ class Product(ABM):
     def last_comment(self):
         return Comment.objects.filter(product=self).order_by('-pk')[0]
 
+
+    def next_statuses(self):
+        return STATUSES_FLOW[self.status]
+
+
 class Comment(ABM):
-
-    # Statuses
-    S10 = 10
-    S20 = 20
-    S30 = 30
-    S40 = 40
-    
-    STATUSES = [(S10, 'przyjęty'),
-              (S20, 'w realizacji'),
-              (S30, 'do wydania'),
-              (S40, 'wydany')]
-
-    STATUS_KEYS = [key for key, name in STATUSES]
 
     description = models.TextField(verbose_name='komentarz')
     product = models.ForeignKey('Product')
@@ -144,7 +135,7 @@ class Comment(ABM):
         return reverse('product_detail', kwargs={'pk': self.product.pk, 'user_pk': self.product.user.pk})
 
     def get_status(self):
-        return dict(Comment.STATUSES)[self.status]
+        return dict(STATUSES)[self.status]
 
     @property
     def cost(self):

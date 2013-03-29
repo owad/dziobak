@@ -12,6 +12,8 @@ from django.utils.datastructures import SortedDict
 from base.models import AbstractBaseModel as ABM
 from base.utils import get_company
 
+from product.constants import *
+
 
 class Company(ABM):
 
@@ -25,11 +27,6 @@ class Company(ABM):
     def __unicode__(self):
         return self.name
 
-
-    def statuses(self):
-        from product.models import Comment
-        return Comment.STATUSES
-               
 
 class UserManager(DjangoUserManager):
 

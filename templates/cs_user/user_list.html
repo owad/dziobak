@@ -20,8 +20,8 @@
         <tbody>
         {% for c in clients %}
             <tr>
-                <td><a href="{{ c.get_absolute_url }}">{{ c.get_full_name }}</a></td>
-                <td>{{ c.company_name|default:'-' }}</td>
+                <td><a href="{{ c.get_absolute_url }}">{{ c.get_full_name|default:"-" }}</a></td>
+                <td><a href="{{ c.get_absolute_url }}">{{ c.company_name|default:"-" }}</a></td>
                 <td>{{ c.address|default:'-' }}</td>
                 <td>{{ c.city|default:'-' }}</td>
                 <td>{{ c.postcode|default:'-' }}</td>

@@ -16,7 +16,7 @@
     <tbody>
     {% for p in products %}
         <tr>
-            <td>{{ p }}</td>
+            <td><a href="{{ p.get_absolute_url }}">{{ p }}</a></td>
             <td><a href="{{ p.user.get_absolute_url }}">{{ p.user }}</a></td>
             <td><a href="{{ p.get_absolute_url }}">{{ p.get_name }}</a></td>
             <td>{{ p.warranty }}</td>
