@@ -76,7 +76,10 @@ class Product(ABM):
         return "%s/%s" % (self.created.year, str(self.key).zfill(4))
 
     def save(self):
-        self.status = self.comment_set.latest('pk').status
+        try:
+            self.status = self.comment_set.latest('pk').status
+        except Comment.DoesNotExist:
+            pass
         return super(Product, self).save()        
 
     @property

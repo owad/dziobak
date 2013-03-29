@@ -64,3 +64,6 @@ div.input-append {
     margin-top: 5px; 
 }
 
+.pagination {
+    text-align: center;
+}
