@@ -28,6 +28,11 @@ class ProductDetail(DetailView):
     context_object_name = 'product'
     model = Product
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetail, self).get_context_data(**kwargs)
+        context['closed'] = CLOSED
+        return context
+
 product_detail = ProductDetail.as_view()
 
 

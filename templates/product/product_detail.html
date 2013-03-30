@@ -20,7 +20,6 @@
             <tr>
                 <td>Data</td>
                 <td>Komentarz</td>
-                <td>Załącznik</td>
                 <td>Koszt usługi</td>
                 <td>Koszt sprzętu</td>
                 <td>Koszt dojazdu</td>
@@ -46,7 +45,7 @@
         </tbody>
     </table>
 
-    <a class="btn fright" href="{% url 'comment_create' product.pk %}">dodaj komentarz/zmień status</a>
+    <a class="btn fright" href="{% url 'comment_create' product.pk %}">dodaj komentarz{% if product.status < closed %}/zmień status{% endif %}</a>
 
     {% endblock %}
 
