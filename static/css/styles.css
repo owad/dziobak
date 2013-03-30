@@ -80,3 +80,11 @@ div.filters {
     min-height: 30px;    
 }
 
+li.filter a {
+    font-size: 12px;
+}
+
+div.navbar div.filters li.filter a {
+    padding: 10px 8px;
+}
+
