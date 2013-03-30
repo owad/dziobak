@@ -128,6 +128,7 @@ class Comment(ABM):
     product = models.ForeignKey('Product')
     user = models.ForeignKey(User)  # employee (determines who is an owner of a product)
     status = models.IntegerField(verbose_name='status')
+    attachment = models.FileField(upload_to='media/attachments', null=True, blank=True)
 
     cost_service = models.FloatField(default=0.0, verbose_name='koszt usługi')
     cost_hardware = models.FloatField(default=0.0, verbose_name='koszt sprzętu')

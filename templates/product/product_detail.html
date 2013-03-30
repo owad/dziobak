@@ -20,6 +20,7 @@
             <tr>
                 <td>Data</td>
                 <td>Komentarz</td>
+                <td>Załącznik</td>
                 <td>Koszt usługi</td>
                 <td>Koszt sprzętu</td>
                 <td>Koszt dojazdu</td>
@@ -31,7 +32,10 @@
         {% for c in product.comment_set.all %}
             <tr>
                 <td>{{ c.created }}</td>
-                <td>{{ c.description|default:'-' }}</td>
+                <td>
+                    {{ c.description|default:'-' }}
+                    {% if c.attachment %}, <a href="{{ c.attachment.url }}">załącznik</a>{% endif %}
+                </td>
                 <td>{% if c.cost_service %}{{ c.cost_service }}zł{% else %}-{% endif %}</td>
                 <td>{% if c.cost_hardware %}{{ c.cost_hardware }}zł{% else %}-{% endif %}</td>
                 <td>{% if c.cost_transport %}{{ c.cost_transport }}zł{% else %}-{% endif %}</td>
