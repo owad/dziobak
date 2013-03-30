@@ -88,3 +88,7 @@ div.navbar div.filters li.filter a {
     padding: 10px 8px;
 }
 
+.active {
+    font-weight: bold;
+}
+
