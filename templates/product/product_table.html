@@ -26,7 +26,7 @@
             <td>{{ p.created }}</td>
             <td>{{ p.serviced_by }}</td>
             <td>
-                <a title="drukuj zgłoszenie" target="_blank" href="{% url 'product_pdf' p.pk p.user.pk %}"><i class="icon-print"></i></a>
+                <a title="drukuj zgłoszenie" target="_blank" href="{% url 'product_pdf' p.user.pk p.pk %}"><i class="icon-print"></i></a>
             </td>
         </tr>
     {% empty %}

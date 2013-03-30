@@ -121,12 +121,16 @@ class User(AbstractUser):
         return self.primary_phone
 
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.company_name:
             username = self.company_name
         else:
             username = self.get_full_name()
 
-        self.username = re.sub(r'\W+', '', username).lower()
-        return super(User, self).save()
+        '''
+        if not self.pk:
+            self.username = re.sub(r'\W+', '', username).lower()
+        '''
+
+        return super(User, self).save(*args, **kwargs)
 

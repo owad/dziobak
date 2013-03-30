@@ -31,6 +31,9 @@
 </head>
 <body>
     <table style="border-collapse: collapse; border-spacing: 0px;">
+        <tr>
+            <td colspan="5" style="text-align: center; font-size: 40px;">{{ user.company }}</td>
+        </tr>
         <tr style="border: 1px solid black; text-align: center; font-size: 18px; font-weight: bold; ">
             <td colspan="5">Zgłoszenie reklamacyjne nr {{ product }} z dnia {{ product.created|date:"d/m/Y" }}</td>
         </tr>
@@ -39,20 +42,19 @@
         </tr>
         <tr>
             <td>
-                <div>LECH-KOM Lubaczów</div>
-                <div>ul. Konery 3</div>
-                <div>37-600 Lubaczów</div>
-                <div>tel. 16-6320977</div>
-                <div>e-mail: biuro@lechkom.pl</div>
+                <div>{{ company }}</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </td>
             <td></td>
             <td></td>
             <td></td>
             <td>
-                <div>{{ client.first_name }} {{ client.last_name }}</div>
+                <div>{{ client.get_full_name }}</div>
                 <div>{{ client.company_name }}</div>
-                <div>{{ client.address_line1 }}</div>
-                <div>{{ client.address_line2 }}</div>
+                <div>{{ client.address }}</div>
                 <div>{{ client.city }} {{ client.postcode }}</div>
                 <div>{{ client.get_phone_numbers }}</div>
             </td>
@@ -84,19 +86,18 @@
                     </tr>
                     <tr>
                         <td style="text-align: right; vertical-align: top; margin-right: 10px;">naprawa gwarancyjna:</td>
-                        <td>{{ product.get_warranty_name|lower }}</td>
+                        <td>{{ product.warranty|lower }}</td>
                     </tr>
                     <tr>
                         <td style="text-align: right; vertical-align: top; margin-right: 10px;">koszt naprawy:</td>
                         <td>
-                        	{{ product.get_cost }}
-                        	{{ product.get_cost_totals }}
+                        	{{ product.cost }}zł
                        	</td>
                     </tr>
-                    {% if product.status == product.NEW %}
+                    {% if product.status == NEW %}
                     <tr>
                         <td style="text-align: right; vertical-align: top; margin-right: 10px;">przewidywany koszt naprawy do:</td>
-                        <td>{{ product.max_cost }}</td>
+                        <td>{{ product.max_cost }}zł</td>
                     </tr>
                     {% endif %}
                 </table>
@@ -112,8 +113,8 @@
         {% for comment in product.comment_set.all %}
         <tr>
             <td style="border-bottom: 1px solid black; width: 200px;">{{ comment.created }}</td>
-            <td style="border-bottom: 1px solid black; text-align: left; width: 200px;">{{ comment.user }}</td>
-            <td colspan="3" style="border-bottom: 1px solid black; text-align: left;">{{ comment }} {{ comment }}</td>
+            <td style="border-bottom: 1px solid black; text-align: left; width: 200px;">{{ comment.user.get_full_name }}</td>
+            <td colspan="3" style="border-bottom: 1px solid black; text-align: left;"> {{ comment.description|default:"-" }}</td>
         </tr>
         {% endfor %}
         <tr>

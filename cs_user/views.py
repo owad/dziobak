@@ -1,4 +1,6 @@
 # -* - coding: utf-8 -*-
+import logging
+
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
@@ -63,7 +65,10 @@ class UserUpdate(UpdateView):
         return get_object_or_404(User, pk=self.kwargs['pk'])
 
     def form_valid(self, form):
-        messages.add_message(self.request, messages.SUCCESS, 'Klient został zaktualizowanny')
+        if self.get_object() == self.request.user:
+            messages.add_message(self.request, messages.SUCCESS, 'Twoje dane zostały zaktualizowanne')
+        else:
+            messages.add_message(self.request, messages.SUCCESS, 'Dane Klienta zostały zaktualizowanne')
         return super(UserUpdate, self).form_valid(form)
 
 user_update = UserUpdate.as_view()
@@ -76,11 +81,15 @@ class EmployeeUpdate(UserUpdate):
     def get_object(self):
         return self.request.user
 
+    def form_valid(self, form):
+        new_password = self.request.POST.get('password1', None)
+        if new_password:
+            user = self.request.user
+            user.set_password(new_password)
+            user.save()
+            messages.add_message(self.request, messages.SUCCESS, 'Hasło zostało zmienione')
 
-    def get_success_url(self):
-        url = super(EmployeeUpdate, self).get_success_url()
-        messages.add_message(self.request, messages.SUCCESS, 'Dane zostały zaktualizowane')
-        return url
+        return super(EmployeeUpdate, self).form_valid(form)
 
 employee_update = EmployeeUpdate.as_view()
 
@@ -89,7 +98,12 @@ def user_password_reset(request):
 
     template_name='registration/password_reset_form.html'
     post_reset_redirect = reverse('user_detail', kwargs={'pk': request.user.pk})
-
+    '''
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            messages.add_message(request, messages.SUCCESS, 'Nowy hasło zostało wysłane na podany adres e-mail')
+    '''
     return password_reset(request,
                    template_name=template_name,
                    email_template_name='registration/password_reset_email.html',

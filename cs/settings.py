@@ -170,3 +170,5 @@ ROWS_PER_PAGE = 50
 
 UPLOAD_URL = 'media/upload/'
 
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+

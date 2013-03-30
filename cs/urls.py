@@ -18,6 +18,9 @@ urlpatterns = patterns('',
 
     # employees
     url(r'^pracownik/zresetuj_haslo$', 'cs_user.views.user_password_reset', name='user_password_reset'),
+    url(r'^pracownik/zresetuj_haslo/wyslij/(?P<uidb36>[0-9A-Za-z]{1,13})-(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+            'django.contrib.auth.views.password_reset_confirm',
+            name='password_reset_confirm'),
 
     # products
     url(r'^', include('product.urls')),
