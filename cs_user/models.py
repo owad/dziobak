@@ -48,7 +48,7 @@ class UserManager(DjangoUserManager):
     def create_superuser(self, username, email, password, **extra_fields):
         user = super(UserManager, self).create_superuser(username, email, password, **extra_fields)
         user.company, _ = Company.objects.get_or_create(name='Admins')
-        user.role = User.EMPLOYEE
+        user.role = User.EMPLOYER
         user.save()
         return user
 
