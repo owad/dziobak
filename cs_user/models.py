@@ -95,6 +95,7 @@ class User(AbstractUser):
     EMPLOYEE_KEYS = [EMPLOYEE, EMPLOYER]
 
     objects = UserManager()
+    all_objects = DjangoUserManager()
 
     class Meta:
         verbose_name = "użytkownik"
@@ -148,10 +149,26 @@ class User(AbstractUser):
         else:
             username = self.get_full_name()
 
-        '''
-        if not self.pk:
+        if not self.pk and not self.username:
             self.username = re.sub(r'\W+', '', username).lower()
-        '''
 
+        try:
+            existing = User.all_objects.filter(username=self.username)
+            if self.pk:
+                existing = existing.exclude(pk=self.pk)
+
+            latest = existing.latest('pk')
+
+            s = latest.username.split('_')
+            if s > 1:
+                number = s[-1]
+            else:
+                number = "2"
+
+            self.username = self.username + "_" + number            
+            
+        except User.DoesNotExist:
+            pass
+                    
         return super(User, self).save(*args, **kwargs)
 

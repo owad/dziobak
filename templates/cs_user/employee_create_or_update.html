@@ -1,6 +1,12 @@
 {% extends 'cs_user/profile_update.html' %}
 
-{% block heading %}Nowy pracownik{% endblock %} 
+{% block heading %}
+    {% if object %}
+        Pracownik {{ object.get_full_name }}
+    {% else %}
+        Nowy pracownik
+    {% endif %}
+{% endblock %} 
 {% block nav_employee_update %}{% endblock %}
 {% block nav_employee_list %}active{% endblock %}
 

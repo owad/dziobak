@@ -12,7 +12,7 @@ from django.contrib import messages
 
 from cs.settings import ROWS_PER_PAGE
 from cs_user.models import User
-from cs_user.forms import UserCreateForm, UserUpdateForm, EmployeeForm
+from cs_user.forms import UserForm, EmployeeForm, EmployerForm
 
 
 class UserDetail(DetailView):
@@ -56,7 +56,7 @@ employee_list = EmployeeList.as_view()
 
 
 class UserCreate(CreateView):
-    form_class = UserCreateForm
+    form_class = UserForm
     template_name = 'cs_user/user_create_or_update.html'
 
     def form_valid(self, form):
@@ -68,8 +68,19 @@ user_create = UserCreate.as_view()
 
 
 class EmployeeCreate(UserCreate):
-    form_class = EmployeeForm
     template_name = 'cs_user/employee_create_or_update.html'
+    form_class = EmployeeForm
+
+    def get_form(self, form_class):
+        if self.request.user.is_superuser:
+            form_class = EmployerForm
+        return  super(EmployeeCreate, self).get_form(form_class)
+    
+    def get_form(self, form_class):
+        self.form_class = EmployeeForm
+        if self.request.user.is_superuser:
+            self.form_class = EmployerForm
+        return  super(EmployeeCreate, self).get_form(self.form_class)
 
     def form_valid(self, form):
         form.instance.company = self.request.user.company
@@ -81,7 +92,7 @@ employee_create = EmployeeCreate.as_view()
 
 
 class UserUpdate(UpdateView):
-    form_class = UserUpdateForm
+    form_class = UserForm
     template_name = 'cs_user/user_create_or_update.html'
     context_object_name = 'client'
 
@@ -89,10 +100,7 @@ class UserUpdate(UpdateView):
         return get_object_or_404(User, pk=self.kwargs['pk'])
 
     def form_valid(self, form):
-        if self.get_object() == self.request.user:
-            messages.add_message(self.request, messages.SUCCESS, 'Twoje dane zostały zaktualizowanne')
-        else:
-            messages.add_message(self.request, messages.SUCCESS, 'Dane Klienta zostały zaktualizowanne')
+        messages.add_message(self.request, messages.SUCCESS, 'Dane Klienta zostały zaktualizowanne')
         return super(UserUpdate, self).form_valid(form)
 
 user_update = UserUpdate.as_view()
@@ -124,6 +132,12 @@ profile_update = ProfileUpdate.as_view()
 class EmployeeUpdate(ProfileUpdate):
     template_name = 'cs_user/employee_create_or_update.html'
 
+    def get_form(self, form_class):
+        self.form_class = EmployeeForm
+        if self.request.user.is_superuser:
+            self.form_class = EmployerForm
+        return  super(EmployeeUpdate, self).get_form(self.form_class)
+
     def get_object(self):
         return User.objects.get(company=self.request.user.company, pk=self.kwargs['pk']) 
         
@@ -137,12 +151,7 @@ def user_password_reset(request):
 
     template_name='registration/password_reset_form.html'
     post_reset_redirect = reverse('user_detail', kwargs={'pk': request.user.pk})
-    '''
-    if request.method == 'POST':
-        form = PasswordResetForm(request.POST)
-        if form.is_valid():
-            messages.add_message(request, messages.SUCCESS, 'Nowy hasło zostało wysłane na podany adres e-mail')
-    '''
+
     return password_reset(request,
                    template_name=template_name,
                    email_template_name='registration/password_reset_email.html',

@@ -14,6 +14,7 @@
         <thead>
             <tr>
                 <td>Klient</td>
+                <td>Firma</td>
                 <td>Adres</td>
                 <td>Miejscowość</td>
                 <td>Kod pocztowy</td>
@@ -25,6 +26,7 @@
         {% for e in employees %}
             <tr>
                 <td><a href="{{ e.get_absolute_url }}">{{ e.get_full_name|default:"-" }}</a></td>
+                <td>{{ e.company }}</td>
                 <td>{{ e.address|default:'-' }}</td>
                 <td>{{ e.city|default:'-' }}</td>
                 <td>{{ e.postcode|default:'-' }}</td>

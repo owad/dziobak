@@ -8,7 +8,7 @@ from django.forms.widgets import Textarea
 from cs_user.models import User
 
 
-class UserCreateForm(ModelForm):
+class UserForm(ModelForm):
 
     class Meta:
         model = User
@@ -23,11 +23,6 @@ class UserCreateForm(ModelForm):
             raise forms.ValidationError('Podaj imię i nazwisko klienta lub nazwę firmy')
 
         return self.cleaned_data
-
-class UserUpdateForm(UserCreateForm):
-    
-    class Meta(UserCreateForm.Meta):
-        pass 
 
 
 class EmployeeForm(ModelForm):
@@ -57,4 +52,23 @@ class EmployeeForm(ModelForm):
                 raise forms.ValidationError("Hasło jest wymagane")
 
         return self.cleaned_data
+
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        queryset = User.all_objects.filter(username=username)
+        if self.instance.pk:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        if queryset.count() > 0:
+            raise forms.ValidationError("Nazwa użytkownika niedostępna")
+        return username
+
+
+class EmployerForm(EmployeeForm):
+
+    class Meta(EmployeeForm.Meta):
+        model = User
+        exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions',
+                   'is_staff', 'is_active', 'date_joined', 'company_name', 'address',
+                   'city', 'postcode', 'secondary_phone', 'subscriber', 'role')
 
