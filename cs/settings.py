@@ -1,6 +1,6 @@
 # -* - coding: utf-8 -*-
 import os
-ROOT_PATH = os.getcwd().rstrip('cs')
+ROOT_PATH = os.getcwd() + '/'
 
 # Django settings for cs project.
 
@@ -178,4 +178,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 if not DEBUG:
     from live_settings import *
+
+
+from cs_user.models import Company
+
+#ALLOWED_HOSTS.extend(Company.objects.all().values_list('domain', flat=True)
 

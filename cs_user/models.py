@@ -8,6 +8,7 @@ from django.contrib.auth.models import AbstractUser, UserManager as DjangoUserMa
 from django.core.validators import RegexValidator
 from django.core.urlresolvers import reverse
 from django.utils.datastructures import SortedDict
+from django.template.defaultfilters import slugify
 
 from base.models import AbstractBaseModel as ABM
 from base.utils import get_company
@@ -24,12 +25,20 @@ class Company(ABM):
     name = models.CharField(max_length=128)
     logo = models.FileField(upload_to="media/logo", blank=True)
 
+    domain = models.CharField(max_length=128, verbose_name="domena", blank=True)
+    slug = models.SlugField(max_length=128, blank=True)
+
     def __unicode__(self):
         return self.name
 
     @property
     def statuses(self):
         return STATUSES
+
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super(Company, self).save(*args, **kwargs)
 
 
 class UserManager(DjangoUserManager):
