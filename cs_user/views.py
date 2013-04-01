@@ -71,11 +71,6 @@ class EmployeeCreate(UserCreate):
     form_class = EmployeeForm
 
     def get_form(self, form_class):
-        if self.request.user.is_superuser:
-            form_class = EmployerForm
-        return  super(EmployeeCreate, self).get_form(form_class)
-    
-    def get_form(self, form_class):
         self.form_class = EmployeeForm
         if self.request.user.is_superuser:
             self.form_class = EmployerForm
@@ -86,7 +81,7 @@ class EmployeeCreate(UserCreate):
         form.instance.role = User.EMPLOYEE
         messages.add_message(self.request, messages.SUCCESS, 'Pracownik został dodany')
         return super(UserCreate, self).form_valid(form)
-
+    
 employee_create = EmployeeCreate.as_view()
 
 
@@ -98,9 +93,9 @@ class UserUpdate(UpdateView):
     def get_object(self):
         return get_object_or_404(User, pk=self.kwargs['pk'])
 
-    def form_valid(self, form):
+    def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Dane Klienta zostały zaktualizowanne')
-        return super(UserUpdate, self).form_valid(form)
+        return super(UserUpdate, self).get_success_url()
 
 user_update = UserUpdate.as_view()
 
@@ -115,6 +110,7 @@ class ProfileUpdate(UserUpdate):
     def form_valid(self, form):
         new_password = self.request.POST.get('password1', None)
         result = super(ProfileUpdate, self).form_valid(form)
+
         if new_password:
             user = self.get_object()
             user.set_password(new_password)
@@ -122,9 +118,6 @@ class ProfileUpdate(UserUpdate):
             messages.add_message(self.request, messages.SUCCESS, 'Hasło zostało zmienione')
 
         return result
-
-    def get_success_url(self):
-        return reverse('profile_update')
 
 profile_update = ProfileUpdate.as_view()
 
