@@ -28,6 +28,8 @@ class Company(ABM):
     domain = models.CharField(max_length=128, verbose_name="domena", blank=True)
     slug = models.SlugField(max_length=128, blank=True)
 
+    active = models.BooleanField(default=True, verbose_name="firma aktywna")
+
     def __unicode__(self):
         return self.name
 
