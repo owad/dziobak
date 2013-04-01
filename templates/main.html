@@ -39,9 +39,9 @@
             <div class="navbar">
                 <div class="navbar-inner">
                     <ul class="nav">
-                        <li {% block nav_product_list %}{% endblock %}><a href="{% url 'product_list'%}">zgłoszenia</a></li>
-                        <li {% block nav_user_list %}{% endblock %}><a href="{% url 'user_list' %}">klienci</a></li>
-                        <li {% block nav_user_create %}{% endblock %}><a href="{% url 'user_create' %}">nowy klient</a></li>
+                        <li class="{% block nav_product_list %}{% endblock %}"><a href="{% url 'product_list'%}">zgłoszenia</a></li>
+                        <li class="{% block nav_user_list %}{% endblock %}"><a href="{% url 'user_list' %}">klienci</a></li>
+                        <li class="{% block nav_user_create %}{% endblock %}"><a href="{% url 'user_create' %}">nowy klient</a></li>
                     </ul>
                     <form method="GET" id="search-form" action="" class="fright">
                         <div class="input-append">

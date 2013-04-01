@@ -69,12 +69,15 @@ user_create = UserCreate.as_view()
 
 class EmployeeCreate(UserCreate):
     form_class = EmployeeForm
+    template_name = 'cs_user/employee_create_or_update.html'
 
     def form_valid(self, form):
         form.instance.company = self.request.user.company
         form.instance.role = User.EMPLOYEE
         messages.add_message(self.request, messages.SUCCESS, 'Pracownik został dodany')
         return super(UserCreate, self).form_valid(form)
+
+employee_create = EmployeeCreate.as_view()
 
 
 class UserUpdate(UpdateView):

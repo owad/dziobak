@@ -15,7 +15,7 @@ urlpatterns = patterns('cs_user.views',
 
     # employers and superusers only
     url(r'^pracownicy$', 'employee_list', name='employee_list'),
-    url(r'^pracownik/nowy$', 'employee_list', name='employee_create'),
+    url(r'^pracownik/nowy$', 'employee_create', name='employee_create'),
     url(r'^pracownik/edytuj/(?P<pk>\d+)$', 'employee_update', name='employee_update'),
 )
 

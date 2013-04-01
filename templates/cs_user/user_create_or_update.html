@@ -2,7 +2,7 @@
 
 {% block heading %}{% if client %}Edycja danych klienta "{{ client }}" {% else %}Nowy klient{% endif %}{% endblock %} 
 
-{% block nav_user_create %}{% if not client.pk %}class="active"{% endif %}{% endblock %} 
+{% block nav_user_create %}active{% endblock %} 
 
 {% block content %}
 {% include 'generic/create_or_update.html' %}
