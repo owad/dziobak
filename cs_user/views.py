@@ -5,14 +5,14 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib.auth.views import password_reset
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 
 from cs.settings import ROWS_PER_PAGE
 from cs_user.models import User
-from cs_user.forms import UserCreateForm, UserUpdateForm, EmployeeUpdateForm
+from cs_user.forms import UserCreateForm, UserUpdateForm, EmployeeForm
 
 
 class UserDetail(DetailView):
@@ -42,7 +42,18 @@ class UserList(ListView):
         return queryset
 
 user_list = UserList.as_view()
+
     
+class EmployeeList(UserList):
+    context_object_name = 'employees'
+    template_name = 'cs_user/employee_list.html'
+
+    def get_queryset(self):
+        return User.objects.filter(role__in=User.EMPLOYEE_KEYS)
+         
+
+employee_list = EmployeeList.as_view()
+
 
 class UserCreate(CreateView):
     form_class = UserCreateForm
@@ -54,6 +65,16 @@ class UserCreate(CreateView):
         return super(UserCreate, self).form_valid(form)
 
 user_create = UserCreate.as_view()
+
+
+class EmployeeCreate(UserCreate):
+    form_class = EmployeeForm
+
+    def form_valid(self, form):
+        form.instance.company = self.request.user.company
+        form.instance.role = User.EMPLOYEE
+        messages.add_message(self.request, messages.SUCCESS, 'Pracownik został dodany')
+        return super(UserCreate, self).form_valid(form)
 
 
 class UserUpdate(UpdateView):
@@ -74,9 +95,9 @@ class UserUpdate(UpdateView):
 user_update = UserUpdate.as_view()
 
 
-class EmployeeUpdate(UserUpdate):
-    form_class = EmployeeUpdateForm
-    template_name = 'cs_user/employee_create_or_update.html'
+class ProfileUpdate(UserUpdate):
+    form_class = EmployeeForm
+    template_name = 'cs_user/profile_update.html'
 
     def get_object(self):
         return self.request.user
@@ -89,7 +110,22 @@ class EmployeeUpdate(UserUpdate):
             user.save()
             messages.add_message(self.request, messages.SUCCESS, 'Hasło zostało zmienione')
 
-        return super(EmployeeUpdate, self).form_valid(form)
+        return super(ProfileUpdate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('profile_update')
+
+profile_update = ProfileUpdate.as_view()
+
+
+class EmployeeUpdate(ProfileUpdate):
+    template_name = 'cs_user/employee_create_or_update.html'
+
+    def get_queryset(self):
+        return User.objects.get(company=user.company, pk=self.kwargs['pk']) 
+        
+    def get_success_url(self):
+        return reverse('employee_list')
 
 employee_update = EmployeeUpdate.as_view()
 

@@ -5,20 +5,6 @@
 {% block nav_user_create %}{% if not client.pk %}class="active"{% endif %}{% endblock %} 
 
 {% block content %}
-
-<form action="" method="post">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-
-    {% if client.pk %}
-    <tr>
-        <td></td>
-        <td><a href="{% url 'user_password_reset' %}">zresetuj hasło</a></td>
-    </tr>
-    {% endif %}
-    {% include 'inc/buttons.html' %}
-    </table>
-</form>
+{% include 'generic/create_or_update.html' %}
 {% endblock %}
 

@@ -1,8 +1,9 @@
-{% extends 'cs_user/user_create_or_update.html' %}
+{% extends 'cs_user/profile_update.html' %}
 
 {% block heading %}{{ user.get_full_name }}{% endblock %} 
+{% block nav_employee_update %}{% endblock %}
+{% block nav_employee_list %}active{% endblock %}
 
-{% block nav_employee_update %}active{% endblock %}
 {% block nav_user_create %}{% endblock %} 
 
  

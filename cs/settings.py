@@ -1,10 +1,12 @@
 # -* - coding: utf-8 -*-
 import os
+import logging
+
 ROOT_PATH = os.getcwd() + '/'
 
 # Django settings for cs project.
 
-DEBUG = False
+DEBUG = True
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
 TEMPLATE_DEBUG = DEBUG
@@ -182,5 +184,5 @@ if not DEBUG:
 
 from cs_user.models import Company
 
-#ALLOWED_HOSTS.extend(Company.objects.all().values_list('domain', flat=True)
+ALLOWED_HOSTS.extend(Company.objects.all().values_list('domain', flat=True))
 

@@ -30,7 +30,7 @@ class UserUpdateForm(UserCreateForm):
         pass 
 
 
-class EmployeeUpdateForm(ModelForm):
+class EmployeeForm(ModelForm):
 
     password1 = forms.CharField(max_length=30, widget=forms.widgets.PasswordInput(), label="Hasło", required=False)
     password2 = forms.CharField(max_length=30, widget=forms.widgets.PasswordInput(), label="Powtórz hasło", required=False)

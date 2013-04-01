@@ -72,6 +72,7 @@ class UserManager(DjangoUserManager):
 
 class User(AbstractUser):
 
+    EMPLOYER = 9
     EMPLOYEE = 10
     CLIENT_WITH_ACCESS = 20
     CLIENT = 30
@@ -86,11 +87,12 @@ class User(AbstractUser):
         (CLIENT, 'Zwykły klient')]
 
     EMPLOYEES = [
+        (EMPLOYER, 'pracodawca'),
         (EMPLOYEE, 'pracownik'),
     ]
 
     CLIENT_KEYS = [CLIENT_WITH_ACCESS, CLIENT]
-    EMPLOYEE_KEYS = [EMPLOYEE]
+    EMPLOYEE_KEYS = [EMPLOYEE, EMPLOYER]
 
     objects = UserManager()
 
@@ -123,7 +125,15 @@ class User(AbstractUser):
         if self.role in User.CLIENT_KEYS:
             return reverse('user_detail', kwargs={'pk': self.pk})
         else:
-            return reverse('employee_update')
+            return reverse('employee_update', kwargs={'pk': self.pk})
+
+    @property
+    def is_employee(self):
+        return self.role in User.EMPLOYEE_KEYS
+    
+    @property
+    def is_client(self):
+        return not self.is_employee
 
     @property
     def phone_numbers(self):

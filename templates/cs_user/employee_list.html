@@ -1,0 +1,41 @@
+{% extends 'main.html' %}
+
+{% block heading %}
+    List pracowników
+    <small>
+        <a title="nowy pracownik" href="{% url 'employee_create' %}"><i class="icon-plus"></i></a>
+    </small>
+{% endblock %}
+
+{% block nav_employee_list %}active{% endblock %}
+
+{% block content %}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td>Klient</td>
+                <td>Adres</td>
+                <td>Miejscowość</td>
+                <td>Kod pocztowy</td>
+                <td>Telefon kontaktowy</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for e in employees %}
+            <tr>
+                <td><a href="{{ e.get_absolute_url }}">{{ e.get_full_name|default:"-" }}</a></td>
+                <td>{{ e.address|default:'-' }}</td>
+                <td>{{ e.city|default:'-' }}</td>
+                <td>{{ e.postcode|default:'-' }}</td>
+                <td>{{ e.phone_numbers }}</td>
+                <td>
+                    <a title="edytuj dane pracownika" class="btn" href="{% url 'employee_update' e.pk %}"><i class="icon-edit"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'generic/pagination.html' %}
+{% endblock %}
+

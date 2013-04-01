@@ -3,12 +3,19 @@ from django.core.urlresolvers import reverse
 
 
 urlpatterns = patterns('cs_user.views',
-    url(r'^lista$', 'user_list', name='user_list'),
-    url(r'^(?P<pk>\d+)/szczegoly$', 'user_detail', name='user_detail'),
-    url(r'^nowy$', 'user_create', name='user_create'),
-    url(r'^edytuj/(?P<pk>\d+)$', 'user_update', name='user_update'),
 
-    #employees 
-    url(r'^profil/edytuj$', 'employee_update', name='employee_update'),
+    url(r'^klienci/lista$', 'user_list', name='user_list'),
+    url(r'^klient/(?P<pk>\d+)/szczegoly$', 'user_detail', name='user_detail'),
+    url(r'^klient/nowy$', 'user_create', name='user_create'),
+    url(r'^klient/edytuj/(?P<pk>\d+)$', 'user_update', name='user_update'),
+
+    # employees
+    url(r'^pracownik/zresetuj_haslo$', 'user_password_reset', name='user_password_reset'),
+    url(r'^profil/edytuj$', 'profile_update', name='profile_update'),
+
+    # employers and superusers only
+    url(r'^pracownicy$', 'employee_list', name='employee_list'),
+    url(r'^pracownik/nowy$', 'employee_list', name='employee_create'),
+    url(r'^pracownik/edytuj/(?P<pk>\d+)$', 'employee_update', name='employee_update'),
 )
 
