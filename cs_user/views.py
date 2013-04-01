@@ -124,8 +124,8 @@ profile_update = ProfileUpdate.as_view()
 class EmployeeUpdate(ProfileUpdate):
     template_name = 'cs_user/employee_create_or_update.html'
 
-    def get_queryset(self):
-        return User.objects.get(company=user.company, pk=self.kwargs['pk']) 
+    def get_object(self):
+        return User.objects.get(company=self.request.user.company, pk=self.kwargs['pk']) 
         
     def get_success_url(self):
         return reverse('employee_list')
