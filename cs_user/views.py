@@ -49,6 +49,8 @@ class EmployeeList(UserList):
     template_name = 'cs_user/employee_list.html'
 
     def get_queryset(self):
+        if self.request.user.is_superuser:
+            return User.all_objects.filter(role__in=User.EMPLOYEE_KEYS)
         return User.objects.filter(role__in=User.EMPLOYEE_KEYS)
          
 
@@ -115,13 +117,14 @@ class ProfileUpdate(UserUpdate):
 
     def form_valid(self, form):
         new_password = self.request.POST.get('password1', None)
+        result = super(ProfileUpdate, self).form_valid(form)
         if new_password:
-            user = self.request.user
+            user = self.get_object()
             user.set_password(new_password)
             user.save()
             messages.add_message(self.request, messages.SUCCESS, 'Hasło zostało zmienione')
 
-        return super(ProfileUpdate, self).form_valid(form)
+        return result
 
     def get_success_url(self):
         return reverse('profile_update')
@@ -139,6 +142,8 @@ class EmployeeUpdate(ProfileUpdate):
         return  super(EmployeeUpdate, self).get_form(self.form_class)
 
     def get_object(self):
+        if self.request.user.is_superuser:
+            return User.all_objects.get(pk=self.kwargs['pk']) 
         return User.objects.get(company=self.request.user.company, pk=self.kwargs['pk']) 
         
     def get_success_url(self):
