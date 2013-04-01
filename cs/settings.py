@@ -6,8 +6,8 @@ ROOT_PATH = os.getcwd() + '/'
 
 # Django settings for cs project.
 
-DEBUG = True
-#DEBUG_PROPAGATE_EXCEPTIONS = True
+DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -181,8 +181,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 if not DEBUG:
     from live_settings import *
 
-
-from cs_user.models import Company
-
-ALLOWED_HOSTS.extend(Company.objects.all().values_list('domain', flat=True))
+# This isn't going to work on whend DEBUG=False
+# Leaving here for later use somewhere else
+#from cs_user.models import Company
+#
+#ALLOWED_HOSTS.extend(Company.objects.all().values_list('domain', flat=True))
 
