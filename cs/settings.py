@@ -1,6 +1,6 @@
 # -* - coding: utf-8 -*-
 import os
-ROOT_PATH = os.getcwd().rstrip('/cs')
+ROOT_PATH = os.getcwd().rstrip('cs')
 
 # Django settings for cs project.
 
@@ -18,7 +18,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': ROOT_PATH + '/db.sqlite3',                      # Or path to database file if using sqlite3.
+        'NAME': ROOT_PATH + 'db.sqlite3',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -65,14 +65,11 @@ STATIC_ROOT = ''
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 
-if DEBUG:
-    STATIC_URL = '/static/'
-else:
-    STATIC_URL = 'http://localhost/static/'
+STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    '%s/%s' % (ROOT_PATH, 'static'),
+    '%s%s' % (ROOT_PATH, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -124,7 +121,7 @@ ROOT_URLCONF = 'cs.urls'
 WSGI_APPLICATION = 'cs.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '%s/%s' % (ROOT_PATH, 'templates'),
+    '%s%s' % (ROOT_PATH, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -175,11 +172,7 @@ AUTH_USER_MODEL = 'cs_user.User'
 ROWS_PER_PAGE = 50
 
 
-if DEBUG:
-    UPLOAD_URL = 'media/upload/'
-else:
-    UPLOAD_URL = 'http://localhost/media/upload/'
-
+UPLOAD_URL = 'media/upload/'
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 
