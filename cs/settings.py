@@ -4,7 +4,9 @@ ROOT_PATH = os.getcwd().rstrip('/cs')
 
 # Django settings for cs project.
 
-DEBUG = True
+DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -16,7 +18,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'db.sqlite3',                      # Or path to database file if using sqlite3.
+        'NAME': ROOT_PATH + '/db.sqlite3',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -27,7 +29,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:8000']
 
 TIME_ZONE = 'Poland'
 LANGUAGE_CODE = 'pl'
@@ -62,7 +64,11 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
+
+if DEBUG:
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = 'http://localhost/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -168,7 +174,15 @@ LOGGING = {
 AUTH_USER_MODEL = 'cs_user.User'
 ROWS_PER_PAGE = 50
 
-UPLOAD_URL = 'media/upload/'
+
+if DEBUG:
+    UPLOAD_URL = 'media/upload/'
+else:
+    UPLOAD_URL = 'http://localhost/media/upload/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+
+if not DEBUG:
+    from live_settings import *
 
