@@ -18,10 +18,7 @@ from cs_user.forms import UserForm, EmployeeForm, EmployerForm
 class UserDetail(DetailView):
     context_object_name = 'client'
     model = User
-    '''
-    def get_queryset(self):
-        return User.objects.filter(company=self.request.user.company)
-    '''
+
 user_detail = UserDetail.as_view()
 
 
