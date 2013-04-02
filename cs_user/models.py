@@ -23,7 +23,7 @@ class Company(ABM):
         verbose_name_plural = "firmy"
     
     name = models.CharField(max_length=128)
-    logo = models.FileField(upload_to="media/logo", blank=True)
+    logo = models.FileField(upload_to="data/logos", blank=True)
 
     domain = models.CharField(max_length=128, verbose_name="domena", blank=True)
     slug = models.SlugField(max_length=128, blank=True)

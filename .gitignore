@@ -3,5 +3,6 @@
 django
 db.sqlite3
 media/*
-attachments/*
 venv/*
+data/logos/*
+data/attachments/*

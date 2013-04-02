@@ -176,16 +176,26 @@ class CommentCreate(CreateView):
 comment_create = CommentCreate.as_view()
 
 
-class ServeAttachment(DetailView):
-    model = Comment
+class ServeAttachment(View):
+
+    def get_file(self):
+        return Comment.objects.get(pk=self.kwargs['pk']).attachment
 
     def get(self, request, *args, **kwargs):
-        c = self.get_object()
-        file_name = smart_str(c.attachment.name)
+        file_obj = self.get_file()
+        file_name = smart_str(file_obj.name)
         mime_type_guess = mimetypes.guess_type(file_name)
-        response = HttpResponse(FileWrapper(c.attachment.file), mimetype=mime_type_guess[0])
+        response = HttpResponse(FileWrapper(file_obj.file), mimetype=mime_type_guess[0])
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name
         return response
 
 serve_attachment = ServeAttachment.as_view()
 
+
+class ServeLogo(ServeAttachment):
+
+    def get_file(self):
+        return self.request.user.company.logo
+        
+serve_logo = ServeLogo.as_view()
+     

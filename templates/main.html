@@ -21,7 +21,7 @@
         {% if user.pk %}
         <div class="row">
             <div class="fleft">
-                <h1>{% if user.company.logo %}<img src="{{ user.company.logo.url }}" style="margin-right: 10px; height: 80px;"/> {% endif %}{{ user.company }}</h1>
+                <h1>{% if user.company.logo %}<img src="{% url 'serve_logo' %}" class="img-polaroid logo" /> {% endif %}{{ user.company }}</h1>
             </div>
             <div class="fright">
                 <div>zalogowany jako {{ user }}. Ostatnie logowanie: {% if user.last_login %}{{ user.last_login }}{% else %} - {% endif %}</div>
