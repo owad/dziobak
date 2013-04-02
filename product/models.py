@@ -87,11 +87,35 @@ class Product(ABM):
         return sum([sum(c) for c in self.comment_set.all().values_list('cost_service', 'cost_hardware', 'cost_transport')])        
 
     @property
-    def serviced_by(self):
-        employee = Comment.objects.filter(product=self, status=PROG)
+    def cost_desc(self):
+        costs = [0.0, 0.0, 0.0]
+        names = ['usługa', 'sprzęt', 'transport']
+        result = self.comment_set.all().values_list('cost_service', 'cost_hardware', 'cost_transport')
+        for s, h, t in result:
+            costs[0] += s
+            costs[1] += h
+            costs[2] += t
+
+        return ', '.join([ "%s: %szł" % (names[key], value) for key, value in enumerate(costs) if value > 0])
+  
+
+    def get_user_by_comment_status(self, status):
+        employee = Comment.objects.filter(product=self, status=status)
         if employee:
-            return employee[0].user.get_full_name()
-        return '-'
+            return employee[0].user
+        return None
+
+    @property
+    def added_by(self):
+        return self.get_user_by_comment_status(NEW)
+    
+    @property
+    def serviced_by(self):
+        return self.get_user_by_comment_status(PROG)
+
+    @property
+    def fixed_by(self):
+        return self.get_user_by_comment_status(READY)
 
     @property
     def get_status(self):

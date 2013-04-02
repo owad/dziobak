@@ -24,7 +24,7 @@
             <td>{{ p.get_status }}</td>
             <td>{{ p.user.phone_numbers }}</td>
             <td>{{ p.created }}</td>
-            <td>{{ p.serviced_by }}</td>
+            <td>{{ p.serviced_by.get_full_name }}</td>
             <td>
                 <a title="drukuj zgłoszenie" target="_blank" href="{% url 'product_pdf' p.user.pk p.pk %}"><i class="icon-print"></i></a>
             </td>
