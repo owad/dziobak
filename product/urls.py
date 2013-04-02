@@ -13,4 +13,5 @@ urlpatterns = patterns('product.views',
 
     # comments
     url(r'^zgloszneie/(?P<product_pk>\d+)/komentarz/nowy', 'comment_create', name='comment_create'),
+    url(r'^zgloszneie/(?P<product_pk>\d+)/komentarz/(?P<pk>\d+)/zalacznik', 'serve_attachment', name='serve_attachment'),
 )

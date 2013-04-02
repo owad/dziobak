@@ -2,6 +2,6 @@
 .*
 django
 db.sqlite3
-media/logo/*
-media/attachment/*
+media/*
+attachments/*
 venv/*
