@@ -85,31 +85,39 @@ class Product(ABM):
 
     @property
     def statuses(self):
-        if self.user.is_client:
+        if self.user.is_normal_client:
             return C1_STATUSES
         if self.user.is_client_with_access:
             return C2_STATUSES
 
     @property
     def status_names(self):
-        if self.user.is_client:
+        if self.user.is_normal_client:
             return C1_STATUS_NAMES
         if self.user.is_client_with_access:
             return C2_STATUS_NAMES
         
     @property
     def status_flow(self):
-        if self.user.is_client:
+        if self.user.is_normal_client:
             return C1_STATUSES_FLOW
         if self.user.is_client_with_access:
             return C2_STATUSES_FLOW
 
     @property
     def init_status(self):
-        if self.user.is_client:
+        if self.user.is_normal_client:
             return NEW
         if self.user.is_client_with_access:
             return REG
+
+    @property
+    def can_update_status(self):
+        if self.is_employee:
+            return True
+        if self.is_client_with_access and self.status in (TO_APPR,):
+            return True
+        return False
 
     @property
     def cost(self):

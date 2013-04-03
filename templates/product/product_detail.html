@@ -44,7 +44,7 @@
         </tbody>
     </table>
 
-    <a class="btn fright" href="{% url 'comment_create' product.pk %}">dodaj komentarz{% if product.status < closed %}/zmień status{% endif %}</a>
+    <a class="btn fright" href="{% url 'comment_create' product.pk %}">dodaj komentarz{% if product.status < closed and user.can_update_status %}/zmień status{% endif %}</a>
 
     {% endblock %}
 

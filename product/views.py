@@ -12,7 +12,7 @@ from django.utils.encoding import smart_str
 
 from cs.settings import ROWS_PER_PAGE
 from product.models import Product, Courier, Comment
-from product.forms import ProductCreateForm, ProductUpdateForm, CommentCreateForm
+from product.forms import ProductForm, CommentForm, ClientCommentForm
 from product.constants import get_status_flow, NEW, CLOSED
 
 from cs_user.models import User
@@ -96,7 +96,7 @@ product_list = ProductList.as_view()
     
 
 class ProductCreate(CreateView):
-    form_class = ProductCreateForm
+    form_class = ProductForm
     template_name = 'product/product_create_or_update.html'    
     context_object_name = 'product'
 
@@ -118,7 +118,7 @@ product_create = ProductCreate.as_view()
 
 
 class ProductUpdate(UpdateView):
-    form_class = ProductUpdateForm
+    form_class = ProductForm
     template_name = 'product/product_create_or_update.html'    
     context_object_name = 'product'
   
@@ -138,8 +138,13 @@ product_update = ProductUpdate.as_view()
 
 
 class CommentCreate(CreateView):
-    form_class = CommentCreateForm
+    form_class = CommentForm
     template_name = 'product/comment_create_or_update.html'
+
+    def get_form_class(self):
+        if self.request.user.is_client_with_access:
+            return ClientCommentForm
+        return CommentForm
 
     def get_product(self):
         return get_object_or_404(Product, pk=self.kwargs['product_pk'])
