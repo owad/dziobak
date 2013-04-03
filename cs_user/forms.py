@@ -24,8 +24,16 @@ class UserForm(ModelForm):
 
         return self.cleaned_data
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            queryset = User.objects.filter(email=email).exclude(pk=self.instance.pk)
+            if queryset.count() > 0:
+                raise forms.ValidationError("Adres e-mail zajęty")
+        return email
 
-class EmployeeForm(ModelForm):
+
+class EmployeeForm(UserForm):
 
     password1 = forms.CharField(max_length=30, widget=forms.widgets.PasswordInput(), label="Hasło", required=False)
     password2 = forms.CharField(max_length=30, widget=forms.widgets.PasswordInput(), label="Powtórz hasło", required=False)
