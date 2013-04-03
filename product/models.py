@@ -10,7 +10,7 @@ from django.db.models.signals import pre_save
 from product.constants import *
 from cs_user.models import User, Company
 from base.models import AbstractBaseModel as ABM
-from base.utils import get_company
+from base.utils import get_company, get_user
 
 
 class Courier(ABM):
@@ -36,10 +36,14 @@ class ProductManager(Manager):
             Q(key__icontains=qs))        
 
     def get_query_set(self):
-        company = get_company()
+        user = get_user()
         queryset = super(ProductManager, self).get_query_set()
-        if company:
-            return queryset.filter(company=company)
+        if user:
+            if user.is_client_with_access:
+                return queryset.filter(company=user.company, user=user)
+            if user.is_employee:
+                company = user.company
+                return queryset.filter(company=company)
         return queryset
 
 
@@ -66,9 +70,6 @@ class Product(ABM):
         verbose_name = u'zgłoszenie'
         ordering = ['-modified']
 
-    def __unicode__(self):
-        return self.name
-
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'pk': self.pk, 'user_pk': self.user.pk})
 
@@ -81,6 +82,34 @@ class Product(ABM):
         except Comment.DoesNotExist:
             pass
         return super(Product, self).save()        
+
+    @property
+    def statuses(self):
+        if self.user.is_client:
+            return C1_STATUSES
+        if self.user.is_client_with_access:
+            return C2_STATUSES
+
+    @property
+    def status_names(self):
+        if self.user.is_client:
+            return C1_STATUS_NAMES
+        if self.user.is_client_with_access:
+            return C2_STATUS_NAMES
+        
+    @property
+    def status_flow(self):
+        if self.user.is_client:
+            return C1_STATUSES_FLOW
+        if self.user.is_client_with_access:
+            return C2_STATUSES_FLOW
+
+    @property
+    def init_status(self):
+        if self.user.is_client:
+            return NEW
+        if self.user.is_client_with_access:
+            return REG
 
     @property
     def cost(self):
@@ -97,7 +126,6 @@ class Product(ABM):
             costs[2] += t
 
         return ', '.join([ "%s: %szł" % (names[key], value) for key, value in enumerate(costs) if value > 0])
-  
 
     def get_user_by_comment_status(self, status):
         employee = Comment.objects.filter(product=self, status=status)
@@ -137,9 +165,9 @@ class Product(ABM):
     def next_status_choices(self):
         ''' return a list of tuples used as forms choices '''
         try:
-            keys = STATUSES_FLOW[self.status]
+            keys = self.status_flow[self.status]
         except KeyError:
-            keys = STATUSES_FLOW[NEW]
+            keys = self.status_flow[self.init_status]
         choices = []
         for k in keys:
             choices.append((k, STATUS_NAMES[k]))

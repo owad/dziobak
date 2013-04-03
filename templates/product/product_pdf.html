@@ -94,7 +94,7 @@
                         	{{ product.cost }}zł
                        	</td>
                     </tr>
-                    {% if product.status == NEW %}
+                    {% if product.status == product.init_status %}
                     <tr>
                         <td style="text-align: right; vertical-align: top; margin-right: 10px;">przewidywany koszt naprawy do:</td>
                         <td>{{ product.max_cost }}zł</td>
@@ -129,11 +129,13 @@
         <tr>
             <td colspan="5">&nbsp;</td>
         </tr>
+        {% if user.is_employee %}
         <tr>
             <td colspan="2" style="margin-left: 10px;">czytelny podpis klienta</td>
             <td></td>
             <td colspan="2" style="text-align: right; margin-right: 10px;">pracownik: {{ user.get_full_name }}</td>
         </tr>
+        {% endif %}
         <tr>
             <td colspan="5">&nbsp;</td>
         </tr>

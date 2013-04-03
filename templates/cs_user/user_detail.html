@@ -2,9 +2,11 @@
 
 {% block heading %}
     {{ client }}
+    {% if user.is_employee %}
     <small>
         <a title="edytuj dane użytkownika" class="btn" href="{% url 'user_update' client.pk %}"><i class="icon-edit"></i></a>
     </small>
+    {% endif %}
 {% endblock %}
 
 {% block content %}

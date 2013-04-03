@@ -33,15 +33,13 @@ class Company(ABM):
     def __unicode__(self):
         return self.name
 
-    @property
-    def statuses(self):
-        return STATUSES
-
-
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         return super(Company, self).save(*args, **kwargs)
 
+    @property
+    def statuses(self):
+        return STATUSES
 
 class UserManager(DjangoUserManager):
 
@@ -60,7 +58,6 @@ class UserManager(DjangoUserManager):
             Q(city__icontains=qs) |
             Q(postcode__icontains=qs) |
             Q(primary_phone__icontains=qs))        
-
 
     def get_query_set(self):
         company = get_company()
@@ -135,6 +132,14 @@ class User(AbstractUser):
     @property
     def is_client(self):
         return not self.is_employee
+
+    @property
+    def is_normal_client(self):
+        return self.role == User.CLIENT
+
+    @property
+    def is_client_with_access(self):
+        return self.role == User.CLIENT_WITH_ACCESS
 
     @property
     def phone_numbers(self):

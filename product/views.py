@@ -5,7 +5,7 @@ import mimetypes
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core.servers.basehttp import FileWrapper
 from django.utils.encoding import smart_str
@@ -13,7 +13,7 @@ from django.utils.encoding import smart_str
 from cs.settings import ROWS_PER_PAGE
 from product.models import Product, Courier, Comment
 from product.forms import ProductCreateForm, ProductUpdateForm, CommentCreateForm
-from product.constants import STATUSES_FLOW, NEW, CLOSED
+from product.constants import get_status_flow, NEW, CLOSED
 
 from cs_user.models import User
 
@@ -49,7 +49,6 @@ class ProductPdf(ProductDetail):
         context['client'] = self.get_object().user
         context['user'] = self.request.user
         context['company'] = self.request.user.company
-        context['NEW'] = NEW
 
         html  = template.render(context)
         result = StringIO.StringIO()
@@ -68,6 +67,11 @@ product_pdf = ProductPdf.as_view()
 class ProductList(ListView):
     context_object_name = 'products'
     paginate_by = ROWS_PER_PAGE
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_client_with_access:
+            return redirect(reverse('user_detail', args=[request.user.pk]))
+        return super(ProductList, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ProductList, self).get_context_data(**kwargs)
@@ -99,9 +103,9 @@ class ProductCreate(CreateView):
     def form_valid(self, form):
         form.instance.user = User.objects.get(pk=self.kwargs['user_pk'])
         form.instance.company = self.request.user.company
-        form.instance.status = NEW
+        form.instance.status = form.instance.init_status
         product = form.save()
-        comment = Comment(product=product, user=self.request.user, status=NEW).save()
+        comment = Comment(product=product, user=self.request.user, status=form.instance.init_status).save()
         messages.add_message(self.request, messages.SUCCESS, 'Zgłoszenie zostało dodane')
         return super(ProductCreate, self).form_valid(form)
 
