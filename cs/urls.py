@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from django.contrib.auth.views import login, logout
+from django.contrib.auth.views import logout, login
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 from cs import settings
@@ -18,11 +18,6 @@ urlpatterns = patterns('',
 
     # products
     url(r'^', include('product.urls')),
-
-    # employees
-    url(r'^pracownik/zresetuj_haslo/wyslij/(?P<uidb36>[0-9A-Za-z]{1,13})-(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-            'django.contrib.auth.views.password_reset_confirm',
-            name='password_reset_confirm'),
 
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),

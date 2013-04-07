@@ -10,12 +10,14 @@ urlpatterns = patterns('cs_user.views',
     url(r'^klient/edytuj/(?P<pk>\d+)$', 'user_update', name='user_update'),
 
     # employees
-    url(r'^pracownik/zresetuj_haslo$', 'user_password_reset', name='user_password_reset'),
     url(r'^profil/edytuj$', 'profile_update', name='profile_update'),
 
     # employers and superusers only
     url(r'^pracownicy$', 'employee_list', name='employee_list'),
     url(r'^pracownik/nowy$', 'employee_create', name='employee_create'),
     url(r'^pracownik/edytuj/(?P<pk>\d+)$', 'employee_update', name='employee_update'),
+
+    # company
+    url(r'^firma/edytuj/(?P<pk>\d+)$', 'company_update', name='company_update'),
 )
 

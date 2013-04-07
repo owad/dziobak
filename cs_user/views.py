@@ -1,28 +1,29 @@
 # -* - coding: utf-8 -*-
 import logging
 
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.urlresolvers import reverse
-from django.contrib.auth.views import password_reset
 from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
+from django.http import Http404
 
 from cs.settings import ROWS_PER_PAGE
-from cs_user.models import User
-from cs_user.forms import UserForm, EmployeeForm, EmployerForm
+from cs_user.models import User, Company
+from cs_user.forms import UserForm, EmployeeForm, EmployerForm, CompanyForm
+
+from base.views import UserCheckAccess
 
 
-class UserDetail(DetailView):
+class UserDetail(UserCheckAccess, DetailView):
     context_object_name = 'client'
     model = User
 
 user_detail = UserDetail.as_view()
 
 
-class UserList(ListView):
+class UserList(UserCheckAccess, ListView):
     context_object_name = 'clients'
     paginate_by = ROWS_PER_PAGE
 
@@ -54,7 +55,7 @@ class EmployeeList(UserList):
 employee_list = EmployeeList.as_view()
 
 
-class UserCreate(CreateView):
+class UserCreate(UserCheckAccess, CreateView):
     form_class = UserForm
     template_name = 'cs_user/user_create_or_update.html'
 
@@ -85,13 +86,13 @@ class EmployeeCreate(UserCreate):
 employee_create = EmployeeCreate.as_view()
 
 
-class UserUpdate(UpdateView):
+class UserUpdate(UserCheckAccess, UpdateView):
     form_class = UserForm
     template_name = 'cs_user/user_create_or_update.html'
     context_object_name = 'client'
 
     def get_object(self):
-        return get_object_or_404(User, pk=self.kwargs['pk'])
+        return get_object_or_404(User, pk=self.kwargs['pk'], role__in=User.CLIENT_KEYS)
 
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Dane Klienta zostały zaktualizowanne')
@@ -105,19 +106,29 @@ class ProfileUpdate(UserUpdate):
     template_name = 'cs_user/profile_update.html'
 
     def get_object(self):
-        return self.request.user
+        user = User.objects.get(pk=self.request.user.pk)
+        logging.warning(user.address)
+        return user
 
     def form_valid(self, form):
+        logging.warning(['form', form.__class__.__name__])
+        logging.warning(form.data)
+        logging.warning(form.cleaned_data)
+        user = form.save()
+        logging.warning(user)
+        logging.warning(user.address)
         new_password = self.request.POST.get('password1', None)
-        result = super(ProfileUpdate, self).form_valid(form)
 
         if new_password:
-            user = self.get_object()
             user.set_password(new_password)
             user.save()
             messages.add_message(self.request, messages.SUCCESS, 'Hasło zostało zmienione')
 
-        return result
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'Twoje dane zostały zaktualizowanne')
+        return reverse('profile_update')
 
 profile_update = ProfileUpdate.as_view()
 
@@ -142,16 +153,15 @@ class EmployeeUpdate(ProfileUpdate):
 employee_update = EmployeeUpdate.as_view()
 
 
-def user_password_reset(request):
+class CompanyUpdate(UpdateView):
+    form_class = CompanyForm
+    template_name = 'cs_user/company_create_or_update.html'
+    context_object_name = 'company'
+    model = Company
 
-    template_name='registration/password_reset_form.html'
-    post_reset_redirect = reverse('user_detail', kwargs={'pk': request.user.pk})
+    def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'Dane firmy zostały zaktualizowanne')
+        return reverse('company_update', args=[self.get_object().pk])
 
-    return password_reset(request,
-                   template_name=template_name,
-                   email_template_name='registration/password_reset_email.html',
-                   subject_template_name='registration/password_reset_subject.txt',
-                   password_reset_form=PasswordResetForm,
-                   token_generator=default_token_generator,
-                   post_reset_redirect=post_reset_redirect)
-
+company_update = CompanyUpdate.as_view()
+     

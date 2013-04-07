@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+{% block heading %}{% if company %}Edycja danych firmy "{{ company }}" {% else %}Nowa firma{% endif %}{% endblock %} 
+
+{% block nav_employee_update %}{% endblock %}
+{% block nav_employee_list %}active{% endblock %}
+
+{% block content %}
+{% include 'generic/create_or_update.html' %}
+{% endblock %}
+

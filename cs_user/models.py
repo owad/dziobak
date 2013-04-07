@@ -41,6 +41,7 @@ class Company(ABM):
     def statuses(self):
         return STATUSES
 
+
 class UserManager(DjangoUserManager):
 
     def create_superuser(self, username, email, password, **extra_fields):
@@ -174,6 +175,9 @@ class User(AbstractUser):
             
         except User.DoesNotExist:
             pass
-                    
+        
+        logging.warning('='*20)     
+        logging.warning(self.address)     
+        logging.warning('='*20)     
         return super(User, self).save(*args, **kwargs)
 

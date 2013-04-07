@@ -42,9 +42,6 @@
                 <div class="navbar-inner">
                     <ul class="nav">
                         <li class="{% block nav_product_list %}{% endblock %}"><a href="{% url 'product_list'%}">zgłoszenia</a></li>
-                        {% if user.is_client_with_access %}
-                        <li class="{% block nav_product_create %}{% endblock %}"><a href="{% url 'product_create' user.pk %}">nowe zgłoszenie</a></li>
-                        {% endif %}
                         {% if user.is_employee %}
                         <li class="{% block nav_user_list %}{% endblock %}"><a href="{% url 'user_list' %}">klienci</a></li>
                         <li class="{% block nav_user_create %}{% endblock %}"><a href="{% url 'user_create' %}">nowy klient</a></li>

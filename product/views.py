@@ -14,8 +14,9 @@ from cs.settings import ROWS_PER_PAGE
 from product.models import Product, Courier, Comment
 from product.forms import ProductForm, CommentForm, ClientCommentForm
 from product.constants import get_status_flow, NEW, CLOSED
-
 from cs_user.models import User
+from base.views import UserCheckAccess
+
 
 # pdf imports
 from django.http import HttpResponse
@@ -27,7 +28,7 @@ import cgi
 from cs.settings import STATIC_URL
 
 
-class ProductDetail(DetailView):
+class ProductDetail(UserCheckAccess, DetailView):
     context_object_name = 'product'
     model = Product
 
@@ -39,7 +40,7 @@ class ProductDetail(DetailView):
 product_detail = ProductDetail.as_view()
 
 
-class ProductPdf(ProductDetail):
+class ProductPdf(ProductDetail, UserCheckAccess):
     template_name = 'product/product_pdf.html'
 
     def write_pdf(self, template_src, context_dict):
@@ -64,7 +65,7 @@ class ProductPdf(ProductDetail):
 product_pdf = ProductPdf.as_view()
 
 
-class ProductList(ListView):
+class ProductList(ListView, UserCheckAccess):
     context_object_name = 'products'
     paginate_by = ROWS_PER_PAGE
 
@@ -95,7 +96,7 @@ class ProductList(ListView):
 product_list = ProductList.as_view()
     
 
-class ProductCreate(CreateView):
+class ProductCreate(UserCheckAccess, CreateView):
     form_class = ProductForm
     template_name = 'product/product_create_or_update.html'    
     context_object_name = 'product'
@@ -117,11 +118,11 @@ class ProductCreate(CreateView):
 product_create = ProductCreate.as_view()
 
 
-class ProductUpdate(UpdateView):
+class ProductUpdate(UserCheckAccess, UpdateView):
     form_class = ProductForm
     template_name = 'product/product_create_or_update.html'    
     context_object_name = 'product'
-  
+
     def get_object(self):
         return get_object_or_404(Product, pk=self.kwargs['pk'])
  
@@ -137,7 +138,7 @@ class ProductUpdate(UpdateView):
 product_update = ProductUpdate.as_view()
 
 
-class CommentCreate(CreateView):
+class CommentCreate(UserCheckAccess, CreateView):
     form_class = CommentForm
     template_name = 'product/comment_create_or_update.html'
 
@@ -185,7 +186,7 @@ class CommentCreate(CreateView):
 comment_create = CommentCreate.as_view()
 
 
-class ServeAttachment(View):
+class ServeAttachment(UserCheckAccess, View):
 
     def get_file(self):
         return Comment.objects.get(pk=self.kwargs['pk']).attachment
@@ -207,4 +208,4 @@ class ServeLogo(ServeAttachment):
         return self.request.user.company.logo
         
 serve_logo = ServeLogo.as_view()
-     
+

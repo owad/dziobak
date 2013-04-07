@@ -26,7 +26,9 @@
             <td>{{ p.created }}</td>
             <td>{{ p.serviced_by.get_full_name }}</td>
             <td>
+                {% if user.is_employee %}
                 <a title="drukuj zgłoszenie" target="_blank" href="{% url 'product_pdf' p.user.pk p.pk %}"><i class="icon-print"></i></a>
+                {% endif %}
             </td>
         </tr>
     {% empty %}

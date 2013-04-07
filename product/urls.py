@@ -7,8 +7,8 @@ urlpatterns = patterns('product.views',
     url(r'^lista$', 'product_list', name='product_list'),
     url(r'^lista/status/(?P<status>\d+)$', 'product_list',  name='product_list'),
     url(r'^klient/(?P<user_pk>\d+)/zgloszenie/(?P<pk>\d+)/szczegoly$', 'product_detail', name='product_detail'),
-    url(r'^klient/(?P<user_pk>\d+)/zglozsenie/(?P<pk>\d+)/pdf$', 'product_pdf', name='product_pdf'),
-    url(r'^klient/(?P<user_pk>\d+)/zglozsenie/nowe$', 'product_create', name='product_create'),
+    url(r'^klient/(?P<user_pk>\d+)/zgloszenie/(?P<pk>\d+)/pdf$', 'product_pdf', name='product_pdf'),
+    url(r'^klient/(?P<user_pk>\d+)/zgloszenie/nowe$', 'product_create', name='product_create'),
     url(r'^klient/(?P<user_pk>\d+)/zgloszenie//(?P<pk>\d+)/edytuj/$', 'product_update', name='product_update'),
 
     # comments

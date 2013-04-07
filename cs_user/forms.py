@@ -5,7 +5,15 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.widgets import Textarea
 
-from cs_user.models import User
+from cs_user.models import User, Company
+
+
+def check_email(email, pk):
+    if email:
+        queryset = User.objects.filter(email=email).exclude(pk=pk)
+        if queryset.count() > 0:
+            raise forms.ValidationError("Adres e-mail zajęty")
+    return email
 
 
 class UserForm(ModelForm):
@@ -15,8 +23,8 @@ class UserForm(ModelForm):
         exclude = ('username', 'password', 'last_login', 'is_superuser', 'groups', 'user_permissions',
                    'is_staff', 'is_active', 'date_joined', 'company')
 
-    address = forms.CharField(widget=Textarea)    
-    role = forms.ChoiceField(choices=User.CLIENTS, initial=User.CLIENT)   
+    address = forms.CharField(widget=Textarea, label='Adres')    
+    role = forms.ChoiceField(choices=User.CLIENTS, initial=User.CLIENT, label="Rola")   
  
     def clean(self):
         if not (self.cleaned_data['first_name'].strip() and self.cleaned_data['last_name'].strip()) and not self.cleaned_data['company_name'].strip():
@@ -26,22 +34,20 @@ class UserForm(ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if email:
-            queryset = User.objects.filter(email=email).exclude(pk=self.instance.pk)
-            if queryset.count() > 0:
-                raise forms.ValidationError("Adres e-mail zajęty")
+        if self.instance.pk:
+            check_email(email, self.instance.pk)
         return email
 
 
-class EmployeeForm(UserForm):
+class EmployeeForm(ModelForm):
 
     password1 = forms.CharField(max_length=30, widget=forms.widgets.PasswordInput(), label="Hasło", required=False)
     password2 = forms.CharField(max_length=30, widget=forms.widgets.PasswordInput(), label="Powtórz hasło", required=False)
 
     first_name = forms.CharField(max_length=64, label="Imię", required=True)
     last_name = forms.CharField(max_length=64, label="Nazwisko", required=True)
-    email = forms.EmailField(required=True)
-    
+    email = forms.EmailField(required=True, label="E-mail")
+   
     class Meta:
         model = User
         exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions',
@@ -71,6 +77,12 @@ class EmployeeForm(UserForm):
             raise forms.ValidationError("Nazwa użytkownika niedostępna")
         return username
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if self.instance.pk:
+            check_email(email, self.instance.pk)
+        return email
+
 
 class EmployerForm(EmployeeForm):
 
@@ -79,4 +91,11 @@ class EmployerForm(EmployeeForm):
         exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions',
                    'is_staff', 'is_active', 'date_joined', 'company_name', 'address',
                    'city', 'postcode', 'secondary_phone', 'subscriber', 'role')
+
+
+class CompanyForm(ModelForm):
+
+    class Meta:
+        model = Company
+        exclude = ('modified', 'slug')
 
