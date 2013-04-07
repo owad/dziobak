@@ -107,16 +107,10 @@ class ProfileUpdate(UserUpdate):
 
     def get_object(self):
         user = User.objects.get(pk=self.request.user.pk)
-        logging.warning(user.address)
         return user
 
     def form_valid(self, form):
-        logging.warning(['form', form.__class__.__name__])
-        logging.warning(form.data)
-        logging.warning(form.cleaned_data)
         user = form.save()
-        logging.warning(user)
-        logging.warning(user.address)
         new_password = self.request.POST.get('password1', None)
 
         if new_password:

@@ -176,8 +176,5 @@ class User(AbstractUser):
         except User.DoesNotExist:
             pass
         
-        logging.warning('='*20)     
-        logging.warning(self.address)     
-        logging.warning('='*20)     
         return super(User, self).save(*args, **kwargs)
 

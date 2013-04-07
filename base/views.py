@@ -15,7 +15,7 @@ ACCESS_LIST = {
 
 
 def d(msg):
-    pass#logging.warning(msg)
+    pass #logging.warning(msg)
 
 def no_access():
     raise Http404()
