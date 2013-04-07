@@ -2,7 +2,6 @@
 import os
 ROOT_PATH = os.getcwd() + '/'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -15,7 +14,5 @@ DATABASES = {
     }
 }
 
-STATIC_URL = 'http://localhost/static/'
-UPLOAD_URL = 'http://localhost/media/upload/'
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
