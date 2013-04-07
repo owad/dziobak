@@ -7,4 +7,5 @@ venv/*
 data/logos/*
 data/attachments/*
 static/admin
+cs/live_settings.py
 
