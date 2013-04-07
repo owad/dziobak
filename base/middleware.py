@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
 import logging
 
 
@@ -13,9 +14,8 @@ class UserRequiredMiddleware(object):
 
         user = request.user
         if user and user.is_authenticated() and not user.company.active:
+            auth_logout(request) 
             messages.add_message(request, messages.SUCCESS, 'Konto nie aktywne')
-            #return redirect(reverse('cs_logout'))
-            
 
         # check if user allowed to see content 
         if not request.user.is_authenticated() and current_url not in (reverse('cs_login'), reverse('cs_logout')):
