@@ -6,7 +6,7 @@ ROOT_PATH = os.getcwd() + '/'
 
 # Django settings for cs project.
 
-DEBUG = True
+DEBUG = False
 #DEBUG_PROPAGATE_EXCEPTIONS = True
 
 TEMPLATE_DEBUG = DEBUG
