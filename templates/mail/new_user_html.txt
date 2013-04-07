@@ -1,0 +1,9 @@
+{% extends 'main.html' %}
+
+{% block main %}
+<h2>TEST E-MAIL</h2>
+<div>{{ user }}</div>
+<div>{{ product }}</div>
+
+{% endblock %}
+

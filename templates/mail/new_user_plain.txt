@@ -1,0 +1,9 @@
+{% extends 'main.html' %}
+
+{% block main %}
+
+<div>{{ user }}</div>
+<div>{{ product }}</div>
+
+{% endblock %}
+

@@ -150,6 +150,11 @@ class User(AbstractUser):
 
 
     def save(self, *args, **kwargs):
+
+        if not self.pk:
+            from mail.utils import welcome_email
+            welcome_email(self)
+
         if self.company_name:
             username = self.company_name
         else:
