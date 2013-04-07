@@ -2,6 +2,8 @@
 import os
 ROOT_PATH = os.getcwd() + '/'
 
+SECRET_KEY = ''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -14,5 +16,10 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+
+
 
