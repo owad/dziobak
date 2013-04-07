@@ -6,8 +6,8 @@ ROOT_PATH = os.getcwd() + '/'
 
 # Django settings for cs project.
 
-DEBUG = False
-#DEBUG_PROPAGATE_EXCEPTIONS = True
+DEBUG = True
+DEBUG_PROPAGATE_EXCEPTIONS = False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -31,7 +31,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:8000', '54.228.212.183', 'dziobak.lechkom.pl']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:8000', '54.228.212.183', 'dziobak.lechkom.pl', 'www.dziobak.lechkom.pl']
 
 TIME_ZONE = 'Poland'
 LANGUAGE_CODE = 'pl'
