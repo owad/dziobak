@@ -17,8 +17,7 @@ class CommentForm(ModelForm):
 
     class Meta:
         model = Comment
-        exclude = ('user', 'modified', 'product', 'status')
-
+        exclude = ('user', 'modified', 'product', 'status', 'status_changed')
 
 
 class ClientCommentForm(ModelForm):

@@ -31,6 +31,18 @@ STATUSES = [
 
 STATUS_NAMES = dict(STATUSES)
 
+### OUT DATED SETS
+
+# 3 DAYS
+OUT_OF_DATE_3 = (REG, NEW, PROG, TO_APPR, APPR, TO_EXT)
+
+# 7 DAYS
+OUT_OF_DATE_7 = (FROM_EXT, READY)
+
+# 10 DAYS 
+OUT_OF_DATE_10 = (AT_EXT,)
+
+
 ### Custom statuses flow for normal clients ###
 
 C1_STATUSES = [

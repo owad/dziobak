@@ -38,6 +38,7 @@ class ProductManager(Manager):
     def get_query_set(self):
         user = get_user()
         queryset = super(ProductManager, self).get_query_set()
+
         if user:
             if user.is_client_with_access:
                 return queryset.filter(company=user.company, user=user)
@@ -45,6 +46,31 @@ class ProductManager(Manager):
                 company = user.company
                 return queryset.filter(company=company)
         return queryset
+
+    def for_user(self, user, queryset=None):
+        product_ids = set(Comment.objects.filter(user=user, status=PROG, status_changed=True).values_list('product_id', flat=True))
+
+        if not queryset:
+            queryset = self.get_query_set()
+        return queryset.filter(pk__in=product_ids)
+
+    def outdated(self, queryset=None):
+        now = datetime.now()
+
+        d3 = now - timedelta(days=3)
+        d7 = now - timedelta(days=7)
+        d10 = now - timedelta(days=10)
+
+        if not queryset:
+            print 'NO QUERYSET'
+            queryset = self.get_query_set()
+        return queryset.filter(Q(modified__lte=d3, status__in=OUT_OF_DATE_3)|
+                        Q(modified__lte=d7, status__in=OUT_OF_DATE_7)|
+                        Q(modified__lte=d10, status__in=OUT_OF_DATE_10))
+
+    def outdated_for_user(self, user):
+        queryset = self.for_user(user)
+        return self.outdated(queryset=queryset)
 
 
 class Product(ABM):
@@ -113,9 +139,10 @@ class Product(ABM):
 
     @property
     def can_update_status(self):
-        if self.is_employee:
+        user = get_user()
+        if user and user.is_employee: 
             return True
-        if self.is_client_with_access and self.status in (TO_APPR,):
+        if user.is_client_with_access and self.status in (TO_APPR,):
             return True
         return False
 
@@ -181,6 +208,8 @@ class Product(ABM):
             choices.append((k, STATUS_NAMES[k]))
         return choices
 
+    def open(self):
+        return self.status < CLOSED
 
 class Comment(ABM):
 
@@ -193,6 +222,8 @@ class Comment(ABM):
     cost_service = models.FloatField(default=0.0, verbose_name='koszt usługi')
     cost_hardware = models.FloatField(default=0.0, verbose_name='koszt sprzętu')
     cost_transport = models.FloatField(default=0.0, verbose_name='koszt dojazdu')
+
+    status_changed = models.BooleanField(default=True)    
 
     class Meta(ABM.Meta):
         verbose_name_plural = "komentarze"

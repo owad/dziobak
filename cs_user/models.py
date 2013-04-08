@@ -127,6 +127,10 @@ class User(AbstractUser):
             return reverse('employee_update', kwargs={'pk': self.pk})
 
     @property
+    def is_employer(self):
+        return self.role == User.EMPLOYER
+
+    @property
     def is_employee(self):
         return self.role in User.EMPLOYEE_KEYS
     
