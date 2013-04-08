@@ -27,8 +27,10 @@ class Courier(ABM):
 
 class ProductManager(Manager):
 
-    def search(self, qs, *args, **kwargs):
-        return self.get_query_set(*args, **kwargs).filter(
+    def search(self, qs, queryset=None, *args, **kwargs):
+        if not queryset:
+            queryset = self.get_query_set()
+        return queryset.filter(
             Q(name__icontains=qs) |
             Q(producent__icontains=qs) |
             Q(serial__icontains=qs) |
@@ -71,6 +73,15 @@ class ProductManager(Manager):
     def outdated_for_user(self, user):
         queryset = self.for_user(user)
         return self.outdated(queryset=queryset)
+
+    def who(self, user, key):
+        if key == 2:
+            return self.for_user(user)
+        if key == 3:
+            return self.outdated()
+        if key == 4:
+            return self.outdated_for_user(user)
+        return self.get_query_set()
 
 
 class Product(ABM):

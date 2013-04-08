@@ -8,7 +8,10 @@
     <div class="navbar">
         <div class="navbar-inner filters">
             <ul class="nav">
-                <li class="filter {% if not status_filter %}active{% endif %}"><a href="{% url 'product_list' %}">wszystkie</a></li>
+                <li class="filter {% if key = 1 %}active{% endif %}"><a href="{% url 'product_list' key=1 %}">wszystkie</a></li>
+                <li class="filter {% if key = 2 %}active{% endif %}"><a href="{% url 'product_list' key=2 %}">moje</a></li>
+                <li class="filter {% if key = 3 %}active{% endif %}"><a href="{% url 'product_list' key=3 %}">przeterminowane</a></li>
+                <li class="filter {% if key = 4 %}active{% endif %}"><a href="{% url 'product_list' key=4 %}">moje przeterminowane</a></li>
                 {% for key, status in user.company.statuses %}
                 <li class="filter {% if key == status_filter %}active{% endif %}"><a href="{% url 'product_list' key %}">{{ status }}</a></li>
                 {% endfor %}

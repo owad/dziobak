@@ -78,20 +78,26 @@ class ProductList(ListView, UserCheckAccess):
         context = super(ProductList, self).get_context_data(**kwargs)
         context['q'] = self.request.GET.get('q', '')
         context['status_filter'] = int(self.kwargs.get('status', 0))
+        context['key'] = int(self.kwargs.get('key', 1))
         return context
 
     def get_queryset(self):
-        Product.objects.company = self.request.user.company
-        q = self.request.GET.get('q', None)
-        if q:
-            queryset = Product.objects.search(q)
-        else: 
-            queryset = Product.objects.all()
-
         status = self.kwargs.get('status', None)
         if status:
-            queryset = queryset.filter(status=status)
-        return queryset 
+            queryset = Product.objects.filter(status=status)
+
+        key = self.kwargs.get('key', 1)
+        if key:
+            queryset = Product.objects.who(user=self.request.user, key=int(key))
+
+        q = self.request.GET.get('q', None)
+        if q:
+            return queryset.search(q, queryset=queryset)
+        
+        try:    
+            return queryset 
+        except UnboundLocalError:
+            return Product.objects.all()
 
 product_list = ProductList.as_view()
     
