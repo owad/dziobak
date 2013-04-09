@@ -1,7 +1,7 @@
-Witamy w systemie serwisowym firmy {{ company }}
+Witamy w systemie serwisowym firmy {{ user.company }}
 
-Twoja nazwa użytkownika to: {{ username }}
-Twoje hasło: {{ password }}
+Twoja nazwa użytkownika to: {{ user.username }}
+Twoje hasło: <haslo>
 
-Zaloguj się na dziobak.lechkom.pl w celu tworzenia i edycji swoich zgłoszeń.
+Zaloguj się na http://dziobak.lechkom.pl w celu tworzenia i edycji swoich zgłoszeń.
 

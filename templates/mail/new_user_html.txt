@@ -2,11 +2,11 @@
 
 {% block main %}
 
-<p>Witamy w systemie serwisowym firmy {{ company }}</p>
-<p>Twoja nazwa użytkownika to: {{ username }}</p>
-<p>Twoje hasło: {{ password }}</p>
+<p>Witamy w systemie serwisowym firmy {{ user.company }}</p>
+<p>Twoja nazwa użytkownika to: {{ user.username }}</p>
+<p>Twoje hasło: <haslo></p>
 
-<p>Zaloguj się na <a href="http://dziobak.lechkom.pl">dziobak.lechkom.pl</a> w celu tworzenia i edycji swoich zgłoszeń.</p>
+<p>Zaloguj się na <a href="http://dziobak.lechkom.pl">http://dziobak.lechkom.pl</a> w celu tworzenia i edycji swoich zgłoszeń.</p>
 
 {% endblock %}
 

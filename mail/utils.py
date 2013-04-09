@@ -1,4 +1,6 @@
 # -* - coding: utf-8 -*-
+import logging
+
 from django.template import Context, Template
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
@@ -13,9 +15,12 @@ def get_email_body(email_type, html=True, context_dict={}):
 
 
 def send_email(subject, from_email, to_emails, plain, html):
-    msg = EmailMultiAlternatives(subject, plain, from_email, to_emails)
-    msg.attach_alternative(html, "text/html")
-    msg.send()
+    try:
+        msg = EmailMultiAlternatives(subject, plain, from_email, to_emails)
+        msg.attach_alternative(html, "text/html")
+        msg.send()
+    except Exception:
+        logging.exception(e)
 
 
 def get_plain_and_html(email_type, context):
@@ -24,7 +29,9 @@ def get_plain_and_html(email_type, context):
     return plain, html
 
 def welcome_email(user):
-    context = {'user': user}
+    context = {
+        'user': user,
+    }
     plain, html = get_plain_and_html('new_user', context)
     send_email(u'%s: witamy w systemie serwisowym Dziobak' % user.company, user.company.from_email, [user.email], plain, html)
 

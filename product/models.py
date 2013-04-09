@@ -268,7 +268,7 @@ class Comment(ABM):
 
 
 # Signals
-from mail.utils import send_email
+from mail.utils import notify_email
 
 def update_key(instance, **kwargs):
     if not instance.pk:

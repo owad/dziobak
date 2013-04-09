@@ -158,10 +158,7 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
 
         if not self.pk:
-            try:
-                welcome_email(self)
-            except Exception, e:
-                logging.exception(e)
+            welcome_email(self)
 
         if self.company_name:
             username = self.company_name
