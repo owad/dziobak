@@ -54,5 +54,5 @@ def notify_email(comment):
     emails.append(comment.user)
  
     plain, html = get_plain_and_html('notify', context)
-    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, user.company.from_email, set(emails), plain, html)
+    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, comment.user.company.from_email, set(emails), plain, html)
 
