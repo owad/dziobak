@@ -5,6 +5,7 @@ from django.template import Context, Template
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 
+from cs.settings import DOMAIN
 
 def get_email_body(email_type, html=True, context_dict={}):
 
@@ -31,6 +32,7 @@ def get_plain_and_html(email_type, context):
 def welcome_email(user):
     context = {
         'user': user,
+        'domain': DOMAIN,
     }
     plain, html = get_plain_and_html('new_user', context)
     send_email(u'%s: witamy w systemie serwisowym Dziobak' % user.company, user.company.from_email, [user.email], plain, html)
@@ -38,6 +40,7 @@ def welcome_email(user):
 
 def notify_email(comment):
     context = {
+        'domain': DOMAIN,
         'editor': comment.user,
         'new_status': comment.status,
         'product': comment.product,

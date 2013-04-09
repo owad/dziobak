@@ -21,3 +21,5 @@ AWS_SECRET_ACCESS_KEY = ''
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
 
+DOMAIN = ''
+

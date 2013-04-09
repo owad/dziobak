@@ -6,7 +6,7 @@
 <p>Twoja nazwa użytkownika to: {{ user.username }}</p>
 <p>Twoje hasło: <haslo></p>
 
-<p>Zaloguj się na <a href="http://dziobak.lechkom.pl">http://dziobak.lechkom.pl</a> w celu tworzenia i edycji swoich zgłoszeń.</p>
+<p>Zaloguj się na <a href="http://{{ domain }}">http://{{ domain }}</a> w celu tworzenia i edycji swoich zgłoszeń.</p>
 
 {% endblock %}
 
