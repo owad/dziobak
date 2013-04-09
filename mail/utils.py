@@ -49,9 +49,9 @@ def notify_email(comment):
     }
      
     from cs_user.models import User
-    email = comment.user.company.user_set.filter(role__in=User.EMPLOYEE_KEYS).values_list('email', flat=True)
-    email = list(emails)
-    email.append(comment.user)
+    emails = comment.user.company.user_set.filter(role__in=User.EMPLOYEE_KEYS).values_list('email', flat=True)
+    emails = list(emails)
+    emails.append(comment.user)
  
     plain, html = get_plain_and_html('notify', context)
     send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, user.company.from_email, set(emails), plain, html)
