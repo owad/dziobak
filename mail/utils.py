@@ -7,6 +7,7 @@ from django.core.mail import EmailMultiAlternatives
 
 from cs.settings import DOMAIN
 
+
 def get_email_body(email_type, html=True, context_dict={}):
 
     template_src = "mail/%s_%s.txt" % (email_type, 'html' if html else 'plain')
@@ -46,7 +47,12 @@ def notify_email(comment):
         'product': comment.product,
         'company': comment.user.company
     }
-  
+     
+    from cs_user.models import User
+    emails = comment.company.user_set.filter(role__in=User.EMPLOYEE_KEYS).values_list('email', flat=True)
+    email = list(emails)
+    email.append(comment.user)
+ 
     plain, html = get_plain_and_html('notify', context)
-    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, 'llechowicz@gmail.com', ['llechowicz@gmail.com'], plain, html)
+    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, user.company.from_email, set(emails), plain, html)
 
