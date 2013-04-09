@@ -50,10 +50,10 @@ def notify_email(comment):
      
     from cs_user.models import User
     emails = comment.user.company.user_set.filter(role__in=User.EMPLOYEE_KEYS).values_list('email', flat=True)
-    emails = list(emails)
-    emails.append(comment.user)
+    if comment.user.email and comment.user.email not in emails:
+        emails.append(comment.user.email)
  
     plain, html = get_plain_and_html('notify', context)
     logging.info(['About to send an email from: ', comment.user.company.from_email, ' to: ', emails])
-    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, comment.user.company.from_email, set(emails), plain, html)
+    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, comment.user.company.from_email, emails, plain, html)
 
