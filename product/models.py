@@ -5,7 +5,7 @@ from datetime import timedelta
 from django.db import models
 from django.db.models import Manager, Q
 from django.core.urlresolvers import reverse
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.db.models.query import QuerySet
 
 from product.constants import *
@@ -265,6 +265,11 @@ class Comment(ABM):
         return self.cost_service + self.cost_hardware + self.cost_transport
 
 
+
+
+# Signals
+from mail.utils import send_email
+
 def update_key(instance, **kwargs):
     if not instance.pk:
         last = Product.objects.filter(created__year=timezone.now().year).order_by('-pk')
@@ -274,5 +279,11 @@ def update_key(instance, **kwargs):
         except IndexError:
             instance.key = 1
 
+
+def notify_users(instance, **kwargs):
+    if instance.status_changed:
+        notify_email(instance)
+
 pre_save.connect(update_key, sender=Product)
+post_save.connect(notify_users, sender=Comment)
 

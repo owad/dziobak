@@ -1,9 +1,7 @@
-{% extends 'main.html' %}
+Witamy w systemie serwisowym firmy {{ company }}
 
-{% block main %}
+Twoja nazwa użytkownika to: {{ username }}
+Twoje hasło: {{ password }}
 
-<div>{{ user }}</div>
-<div>{{ product }}</div>
-
-{% endblock %}
+Zaloguj się na dziobak.lechkom.pl w celu tworzenia i edycji swoich zgłoszeń.
 

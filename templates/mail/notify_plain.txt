@@ -1,0 +1,6 @@
+Status zgłoszenia {{ product }} został zaktualizowany do "{{ new_status }}".
+
+Użyj adresu podanego poniżej aby przejść do widoku zgłoszenia.
+
+Adres: {{ product.get_absolute_url }}
+

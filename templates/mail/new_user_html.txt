@@ -1,9 +1,12 @@
 {% extends 'main.html' %}
 
 {% block main %}
-<h2>TEST E-MAIL</h2>
-<div>{{ user }}</div>
-<div>{{ product }}</div>
+
+<p>Witamy w systemie serwisowym firmy {{ company }}</p>
+<p>Twoja nazwa użytkownika to: {{ username }}</p>
+<p>Twoje hasło: {{ password }}</p>
+
+<p>Zaloguj się na <a href="http://dziobak.lechkom.pl">dziobak.lechkom.pl</a> w celu tworzenia i edycji swoich zgłoszeń.</p>
 
 {% endblock %}
 

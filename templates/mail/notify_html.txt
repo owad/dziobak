@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+
+{% block main %}
+
+<p>Satus zgłoszenia {{ product }} został zaktualizowany do: <b>{{ status }}</b>.</p>
+
+<p>Kliknij <a href="{{ product.get_absolute_url }}">tutaj</a> aby przejść do widoku zgłoszenia.</p>
+
+{% endblock %}
+

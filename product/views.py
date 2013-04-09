@@ -170,8 +170,10 @@ class CommentCreate(UserCheckAccess, CreateView):
         if submit and int(submit) > 0:  # status bump
             form.fields['description'].required = False
             form.instance.status = int(submit)
+            form.instance.status_changed = True
         else:  # just a comment
             form.instance.status = self.get_product().status 
+            form.instance.status_changed = False
             
         return form
 
