@@ -12,8 +12,8 @@ def get_email_body(email_type, html=True, context_dict={}):
     return template.render(context) 
 
 
-def send_email(subject, from_email, to_email, plain, html):
-    msg = EmailMultiAlternatives(subject, plain, from_email, [to_email])
+def send_email(subject, from_email, to_emails, plain, html):
+    msg = EmailMultiAlternatives(subject, plain, from_email, to_emails)
     msg.attach_alternative(html, "text/html")
     msg.send()
 
@@ -26,7 +26,7 @@ def get_plain_and_html(email_type, context):
 def welcome_email(user):
     context = {'user': user}
     plain, html = get_plain_and_html('new_user', context)
-    send_email(u'%s: witamy w systemie serwisowym Dziobak' % user.company, user.company.from_email, user.email, plain, html)
+    send_email(u'%s: witamy w systemie serwisowym Dziobak' % user.company, user.company.from_email, [user.email], plain, html)
 
 
 def notify_email(comment):
@@ -38,5 +38,5 @@ def notify_email(comment):
     }
   
     plain, html = get_plain_and_html('notify', context)
-    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, 'llechowicz@gmail.com', 'llechowicz@gmail.com', plain, html)
+    send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, 'llechowicz@gmail.com', ['llechowicz@gmail.com'], plain, html)
 

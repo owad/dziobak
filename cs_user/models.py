@@ -14,6 +14,7 @@ from base.models import AbstractBaseModel as ABM
 from base.utils import get_company
 
 from product.constants import *
+from mail.utils import welcome_email
 
 
 class Company(ABM):
@@ -157,8 +158,10 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
 
         if not self.pk:
-            from mail.utils import welcome_email
-            welcome_email(self)
+            try:
+                welcome_email(self)
+            except Exception, e:
+                logging.exception(e)
 
         if self.company_name:
             username = self.company_name
