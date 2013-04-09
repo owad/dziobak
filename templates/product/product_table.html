@@ -15,7 +15,7 @@
     </thead>
     <tbody>
     {% for p in products %}
-        <tr>
+        <tr class="{{ p.css_alert }}">
             <td><a href="{{ p.get_absolute_url }}">{{ p }}</a></td>
             <td><a href="{{ p.user.get_absolute_url }}">{{ p.user }}</a></td>
             <td><a href="{{ p.get_absolute_url }}">{{ p.get_name }}</a></td>

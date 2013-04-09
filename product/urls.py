@@ -4,8 +4,7 @@ urlpatterns = patterns('product.views',
 
     # products
     url(r'^lista$', 'product_list', name='product_list'),
-    url(r'^lista/(?P<key>\d+)$', 'product_list', name='product_list'),
-    url(r'^lista/status/(?P<status>\d+)/$', 'product_list',  name='product_list'),
+    url(r'^lista/(?P<status>\d+)/$', 'product_list',  name='product_list'),
 
     url(r'^klient/(?P<user_pk>\d+)/zgloszenie/(?P<pk>\d+)/szczegoly$', 'product_detail', name='product_detail'),
     url(r'^klient/(?P<user_pk>\d+)/zgloszenie/(?P<pk>\d+)/pdf$', 'product_pdf', name='product_pdf'),

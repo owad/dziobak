@@ -1,11 +1,12 @@
 # -* - coding: utf-8 -*-
 import logging
-from datetime import datetime, timedelta
-
+from django.utils import timezone
+from datetime import timedelta
 from django.db import models
 from django.db.models import Manager, Q
 from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save
+from django.db.models.query import QuerySet
 
 from product.constants import *
 from cs_user.models import User, Company
@@ -25,21 +26,50 @@ class Courier(ABM):
         return self.name
 
 
-class ProductManager(Manager):
-
-    def search(self, qs, queryset=None, *args, **kwargs):
-        if not queryset:
-            queryset = self.get_query_set()
-        return queryset.filter(
+class ProductMixin(object):
+    
+    def search(self, qs, *args, **kwargs):
+        return self.filter(
             Q(name__icontains=qs) |
             Q(producent__icontains=qs) |
             Q(serial__icontains=qs) |
             Q(invoice__icontains=qs) |
             Q(key__icontains=qs))        
 
+    def for_user(self, user):
+        product_ids = set(Comment.objects.filter(user=user, status=PROG, status_changed=True).values_list('product_id', flat=True))
+        return self.filter(pk__in=product_ids)
+
+    def outdated(self):
+        now = timezone.now()
+
+        d3 = now - timedelta(days=3)
+        d7 = now - timedelta(days=7)
+        d10 = now - timedelta(days=10)
+
+        return self.filter(Q(modified__lte=d3, status__in=OUT_OF_DATE_3)|
+                        Q(modified__lte=d7, status__in=OUT_OF_DATE_7)|
+                        Q(modified__lte=d10, status__in=OUT_OF_DATE_10))
+
+    def who(self, user, key):
+        if key == 2:
+            return self.for_user(user)
+        if key == 3:
+            return self.outdated()
+        if key == 4:
+            return self.for_user(user).outdated()
+        return self
+
+
+class ProductQuerySet(QuerySet, ProductMixin):
+    pass
+
+
+class ProductManager(Manager, ProductMixin):
+
     def get_query_set(self):
         user = get_user()
-        queryset = super(ProductManager, self).get_query_set()
+        queryset = ProductQuerySet(self.model, using=self._db)
 
         if user:
             if user.is_client_with_access:
@@ -48,41 +78,6 @@ class ProductManager(Manager):
                 company = user.company
                 return queryset.filter(company=company)
         return queryset
-
-    def for_user(self, user, queryset=None):
-        product_ids = set(Comment.objects.filter(user=user, status=PROG, status_changed=True).values_list('product_id', flat=True))
-
-        if not queryset:
-            queryset = self.get_query_set()
-        return queryset.filter(pk__in=product_ids)
-
-    def outdated(self, queryset=None):
-        now = datetime.now()
-
-        d3 = now - timedelta(days=3)
-        d7 = now - timedelta(days=7)
-        d10 = now - timedelta(days=10)
-
-        if not queryset:
-            print 'NO QUERYSET'
-            queryset = self.get_query_set()
-        return queryset.filter(Q(modified__lte=d3, status__in=OUT_OF_DATE_3)|
-                        Q(modified__lte=d7, status__in=OUT_OF_DATE_7)|
-                        Q(modified__lte=d10, status__in=OUT_OF_DATE_10))
-
-    def outdated_for_user(self, user):
-        queryset = self.for_user(user)
-        return self.outdated(queryset=queryset)
-
-    def who(self, user, key):
-        if key == 2:
-            return self.for_user(user)
-        if key == 3:
-            return self.outdated()
-        if key == 4:
-            return self.outdated_for_user(user)
-        return self.get_query_set()
-
 
 class Product(ABM):
 
@@ -222,6 +217,21 @@ class Product(ABM):
     def open(self):
         return self.status < CLOSED
 
+    def css_alert(self):
+        now = timezone.now()
+        d10 = now - timedelta(days=10)
+        d7 = now - timedelta(days=7)
+        d3 = now - timedelta(days=3)
+        date = self.last_comment.created
+
+        if date < d10: # and self.status in OUT_OF_DATE_10:
+            return 'error'
+        if date < d7: # and self.status in OUT_OF_DATE_7:
+            return 'warning'
+        if date < d3: # and self.status in OUT_OF_DATE_3:
+            return 'info'
+
+
 class Comment(ABM):
 
     description = models.TextField(verbose_name='komentarz')
@@ -257,7 +267,7 @@ class Comment(ABM):
 
 def update_key(instance, **kwargs):
     if not instance.pk:
-        last = Product.objects.filter(created__year=datetime.now().year).order_by('-pk')
+        last = Product.objects.filter(created__year=timezone.now().year).order_by('-pk')
         try:
             key = last[0].key
             instance.key = key + 1
