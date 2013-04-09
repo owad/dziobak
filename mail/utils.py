@@ -49,7 +49,7 @@ def notify_email(comment):
     }
      
     from cs_user.models import User
-    emails = comment.company.user_set.filter(role__in=User.EMPLOYEE_KEYS).values_list('email', flat=True)
+    email = comment.user.company.user_set.filter(role__in=User.EMPLOYEE_KEYS).values_list('email', flat=True)
     email = list(emails)
     email.append(comment.user)
  
