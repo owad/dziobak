@@ -21,7 +21,7 @@ def send_email(subject, from_email, to_emails, plain, html):
         msg = EmailMultiAlternatives(subject, plain, from_email, to_emails)
         msg.attach_alternative(html, "text/html")
         msg.send()
-    except Exception:
+    except Exception, e:
         logging.exception(e)
 
 
@@ -54,5 +54,6 @@ def notify_email(comment):
     emails.append(comment.user)
  
     plain, html = get_plain_and_html('notify', context)
+    logging.info(['About to send an email from: ', comment.user.company.from_email, ' to: ', emails])
     send_email(u'Dziobak - zgłoszenie %s zmieniło status' % comment.product, comment.user.company.from_email, set(emails), plain, html)
 
